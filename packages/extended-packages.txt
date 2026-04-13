@@ -1,0 +1,16 @@
+microsoft-edge-stable-bin
+brave-bin
+postman-bin
+visual-studio-code-bin
+mysql-workbench
+davinci-resolve
+audacity
+vlc
+fastfetch
+ffmpeg
+gst-libav
+gst-plugins-base
+gst-plugins-good
+gst-plugins-bad
+gst-plugins-ugly
+intel-compute-runtime

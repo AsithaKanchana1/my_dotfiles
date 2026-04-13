@@ -1,0 +1,15 @@
+kitty
+antigravity
+tmux
+neovim
+fzf
+zoxide
+nodejs
+npm
+sqlite
+python
+python-pip
+rustup
+rclone
+btop
+htop

@@ -1,0 +1,31 @@
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+PS1='[\u@\h \W]\$ '
+
+
+fastfetch
+
+#zoxide initilized
+eval "$(zoxide init bash)"
+
+#yazi y coomand 
+
+# Custom Yazi Wrapper with Yes/No exit prompt
+y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		# This creates the visual prompt. Enter = Yes, Right Arrow then Enter = No.
+		if whiptail --title "Yazi Exit" --yesno "Keep terminal in this folder?\n\n$cwd" 10 55; then
+			cd -- "$cwd"
+		fi
+	fi
+	rm -f -- "$tmp"
+}

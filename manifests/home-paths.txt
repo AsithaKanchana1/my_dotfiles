@@ -1,0 +1,4 @@
+.bashrc
+.bash_profile
+.bash_logout
+.bashrc.bak

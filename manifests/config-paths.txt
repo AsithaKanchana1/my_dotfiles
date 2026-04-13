@@ -1,0 +1,12 @@
+dolphinrc
+gtk-3.0
+htop
+hypr
+kitty
+kwalletrc
+mimeapps.list
+networkmanager-dmenu
+pavucontrol.ini
+starship.toml
+waybar
+zsh
