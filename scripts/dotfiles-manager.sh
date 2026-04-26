@@ -7,6 +7,7 @@ usage() {
   cat <<'EOF'
 Usage:
   ./scripts/dotfiles-manager.sh                # interactive menu
+  ./scripts/dotfiles-manager.sh --action <N>   # run menu option number
   ./scripts/dotfiles-manager.sh <command>
 
 Commands:
@@ -27,6 +28,33 @@ Commands:
   check-paths
   help
 EOF
+}
+
+run_action_number() {
+  local action="$1"
+
+  case "$action" in
+    1) run_command backup-all ;;
+    2) run_command backup-all-clean ;;
+    3) run_command backup-home ;;
+    4) run_command backup-home-clean ;;
+    5) run_command backup-config ;;
+    6) run_command backup-config-clean ;;
+    7) run_command apply-all ;;
+    8) run_command apply-home ;;
+    9) run_command apply-config ;;
+    10) run_command install-base ;;
+    11) run_command install-extended ;;
+    12) run_command auto-mount ;;
+    13) run_command auto-mount-dry-run ;;
+    14) run_command setup-neovim-vscode ;;
+    15) run_command check-paths ;;
+    16) echo "Bye." ;;
+    *)
+      echo "Unknown action number: $action" >&2
+      return 1
+      ;;
+  esac
 }
 
 run_command() {
@@ -92,51 +120,116 @@ run_command() {
 }
 
 show_menu() {
-  echo "Dotfiles Manager"
-  echo "----------------"
+  local items=(
+    "Backup all"
+    "Backup all (clean)"
+    "Backup home"
+    "Backup home (clean)"
+    "Backup config"
+    "Backup config (clean)"
+    "Apply all"
+    "Apply home"
+    "Apply config"
+    "Install base packages"
+    "Install extended packages"
+    "Auto-mount drives"
+    "Auto-mount drives (dry-run)"
+    "Setup Neovim (VS Code style)"
+    "Check manifest paths"
+    "Quit"
+  )
+  local selected=0
+  local total="${#items[@]}"
+  local key=""
+  local i
+  local action_number
 
-  PS3="Select an action (number): "
-  select choice in \
-    "Backup all" \
-    "Backup all (clean)" \
-    "Backup home" \
-    "Backup home (clean)" \
-    "Backup config" \
-    "Backup config (clean)" \
-    "Apply all" \
-    "Apply home" \
-    "Apply config" \
-    "Install base packages" \
-    "Install extended packages" \
-    "Auto-mount drives" \
-    "Auto-mount drives (dry-run)" \
-    "Setup Neovim (VS Code style)" \
-    "Check manifest paths" \
-    "Quit"; do
-    case "$REPLY" in
-      1) run_command backup-all; break ;;
-      2) run_command backup-all-clean; break ;;
-      3) run_command backup-home; break ;;
-      4) run_command backup-home-clean; break ;;
-      5) run_command backup-config; break ;;
-      6) run_command backup-config-clean; break ;;
-      7) run_command apply-all; break ;;
-      8) run_command apply-home; break ;;
-      9) run_command apply-config; break ;;
-      10) run_command install-base; break ;;
-      11) run_command install-extended; break ;;
-      12) run_command auto-mount; break ;;
-      13) run_command auto-mount-dry-run; break ;;
-      14) run_command setup-neovim-vscode; break ;;
-      15) run_command check-paths; break ;;
-      16) echo "Bye."; break ;;
-      *) echo "Invalid selection." ;;
+  while true; do
+    printf '\033[H\033[2J'
+    echo "Dotfiles Manager"
+    echo "----------------"
+    echo "Use ↑/↓ (or j/k), Enter to select, q to quit."
+    echo
+
+    for ((i = 0; i < total; i++)); do
+      if [[ "$i" -eq "$selected" ]]; then
+        printf " > %2d) %s\n" "$((i + 1))" "${items[$i]}"
+      else
+        printf "   %2d) %s\n" "$((i + 1))" "${items[$i]}"
+      fi
+    done
+
+    IFS= read -rsn1 key || true
+    if [[ "$key" == $'\x1b' ]]; then
+      # Consume the remaining bytes of escape sequences such as arrow keys.
+      IFS= read -rsn2 -t 0.01 key || true
+    fi
+
+    case "$key" in
+      $'\x1b[A'|k|K)
+        selected=$(((selected - 1 + total) % total))
+        ;;
+      $'\x1b[B'|j|J)
+        selected=$(((selected + 1) % total))
+        ;;
+      $'\n'|$'\r')
+        action_number="$((selected + 1))"
+        printf '\n'
+        run_action_number "$action_number"
+        break
+        ;;
+      q|Q)
+        printf '\nBye.\n'
+        break
+        ;;
+      [1-9])
+        if (( key <= total )); then
+          printf '\n'
+          run_action_number "$key"
+          break
+        fi
+        ;;
+      1)
+        IFS= read -rsn1 -t 0.8 key || key=""
+        case "$key" in
+          [0-6])
+            action_number="1$key"
+            printf '\n'
+            run_action_number "$action_number"
+            break
+            ;;
+          *)
+            ;;
+        esac
+        ;;
+      *)
+        ;;
     esac
   done
 }
 
 if [[ $# -eq 0 ]]; then
+  if [[ ! -t 0 ]]; then
+    echo "Interactive menu requires a TTY. Use a command or --action <N>." >&2
+    usage
+    exit 1
+  fi
   show_menu
+  exit 0
+fi
+
+if [[ "$1" == "--action" ]]; then
+  if [[ $# -lt 2 ]]; then
+    echo "Missing value for --action" >&2
+    usage
+    exit 1
+  fi
+  run_action_number "$2"
+  exit 0
+fi
+
+if [[ "$1" =~ ^[0-9]+$ ]]; then
+  run_action_number "$1"
   exit 0
 fi
 

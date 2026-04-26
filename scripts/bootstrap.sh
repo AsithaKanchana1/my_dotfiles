@@ -6,20 +6,23 @@ DEFAULT_DIR="$HOME/.local/share/my_dotfiles"
 BRANCH="main"
 TARGET_DIR="$DEFAULT_DIR"
 RUN_COMMAND=""
+RUN_ACTION=""
 
 usage() {
   cat <<'EOF'
-Usage: bootstrap.sh [--dir PATH] [--branch NAME] [--command CMD]
+Usage: bootstrap.sh [--dir PATH] [--branch NAME] [--command CMD] [--action N]
 
 Options:
   --dir PATH      Clone/update into PATH (default: ~/.local/share/my_dotfiles)
   --branch NAME   Git branch to use (default: main)
   --command CMD   Run a manager command directly (example: apply-all)
+  --action N      Run a manager menu item by number (example: 7 for "Apply all")
   -h, --help      Show help
 
 Examples:
   bootstrap.sh
   bootstrap.sh --command check-paths
+  bootstrap.sh --action 15
   bootstrap.sh --dir "$HOME/my_dotfiles"
 EOF
 }
@@ -36,6 +39,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --command)
       RUN_COMMAND="${2:-}"
+      shift 2
+      ;;
+    --action)
+      RUN_ACTION="${2:-}"
       shift 2
       ;;
     -h|--help)
@@ -76,6 +83,14 @@ chmod +x "$TARGET_DIR"/scripts/*.sh
 
 if [[ -n "$RUN_COMMAND" ]]; then
   exec "$TARGET_DIR/scripts/dotfiles-manager.sh" "$RUN_COMMAND"
+elif [[ -n "$RUN_ACTION" ]]; then
+  exec "$TARGET_DIR/scripts/dotfiles-manager.sh" --action "$RUN_ACTION"
+elif [[ ! -t 0 ]]; then
+  echo "No interactive terminal detected, so the menu cannot read a selection." >&2
+  echo "Run bootstrap with --command or --action, for example:" >&2
+  echo "  curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --action 7" >&2
+  echo "  curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --command apply-all" >&2
+  exit 1
 else
   exec "$TARGET_DIR/scripts/dotfiles-manager.sh"
 fi
