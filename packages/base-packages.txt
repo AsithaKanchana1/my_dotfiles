@@ -1,6 +1,7 @@
 kitty
 antigravity
 nvim
+distrobox
 fzf
 zoxide
 nodejs

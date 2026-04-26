@@ -1,97 +1,106 @@
 # Arch Dotfiles
 
-A clean, repeatable Arch setup with:
+Reliable, repeatable Arch Linux dotfile management with:
 
-- Package installation (base + optional extended set)
-- Dotfile backup from the current system into this repo
-- Dotfile apply workflow to restore your setup on another machine
+- Package installation from curated lists
+- Backup of selected home and config paths
+- Apply workflow for restoring the same setup on another machine
+- Optional Neovim bootstrap with VS Code-style ergonomics
 
-## Repository Layout
+## Core Features
 
-- `scripts/install-packages.sh`: Installs packages from lists in `packages/`
-- `scripts/install-base-packages.sh`: Installs only base package set
-- `scripts/install-extended-packages.sh`: Installs base + extended package sets
-- `scripts/backup-home.sh`: Backs up paths listed in `manifests/home-paths.txt`
-- `scripts/backup-config.sh`: Backs up paths listed in `manifests/config-paths.txt`
-- `scripts/backup-dotfiles.sh`: Runs home + config backups together
-- `scripts/apply-home.sh`: Applies tracked home dotfiles only
-- `scripts/apply-config.sh`: Applies tracked config dotfiles only
-- `scripts/apply-dotfiles.sh`: Runs home + config apply together
-- `scripts/auto-mount-drives.sh`: Auto-mounts eligible disk partitions via `udisksctl`
-- `scripts/check-manifest-paths.sh`: Shows which manifest paths exist/missing on current system
-- `scripts/dotfiles-manager.sh`: Master script (interactive menu + command mode)
-- `scripts/bootstrap.sh`: Clone/update from GitHub and run manager
-- `packages/base-packages.txt`: Core package list
-- `packages/extended-packages.txt`: Optional package list
-- `manifests/home-paths.txt`: Dotfiles from `$HOME` to track
-- `manifests/config-paths.txt`: Paths from `$HOME/.config` to track
-- `dotfiles/home`: Backed up files from `$HOME`
-- `dotfiles/config`: Backed up config entries from `$HOME/.config`
+- Manifest-driven backup and restore
+- Script-first workflow for automation and reproducibility
+- Interactive manager for day-to-day operations
+- Safe drive auto-mount support with dry-run mode
+
+## Project Structure
+
+- `scripts/install-packages.sh`: Install packages from list files in `packages/`
+- `scripts/install-base-packages.sh`: Install only base packages
+- `scripts/install-extended-packages.sh`: Install base and extended packages
+- `scripts/backup-home.sh`: Backup paths listed in `manifests/home-paths.txt`
+- `scripts/backup-config.sh`: Backup paths listed in `manifests/config-paths.txt`
+- `scripts/backup-dotfiles.sh`: Run home and config backups together
+- `scripts/apply-home.sh`: Apply tracked home dotfiles
+- `scripts/apply-config.sh`: Apply tracked config dotfiles
+- `scripts/apply-dotfiles.sh`: Run home and config apply together
+- `scripts/auto-mount-drives.sh`: Auto-mount eligible partitions via `udisksctl`
+- `scripts/check-manifest-paths.sh`: Validate manifest entries against the current system
+- `scripts/setup-neovim-vscode.sh`: Configure Neovim with VS Code-like behavior and language tooling
+- `scripts/dotfiles-manager.sh`: Central command runner with menu and direct modes
+- `scripts/bootstrap.sh`: Clone or update from GitHub and launch manager
+- `packages/base-packages.txt`: Base package catalog
+- `packages/extended-packages.txt`: Optional package catalog
+- `manifests/home-paths.txt`: Paths under `$HOME` to track
+- `manifests/config-paths.txt`: Paths under `$HOME/.config` to track
+- `dotfiles/home`: Versioned home dotfiles
+- `dotfiles/config`: Versioned config dotfiles
 
 ## Quick Start
 
-0. One-line GitHub bootstrap (clone/update + open master menu):
+1. Bootstrap from GitHub and open the manager menu.
 
-   ```bash
-   bash <(curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh)
-   ```
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh)
+```
 
-   Direct command mode (example):
+1. Run a direct command through bootstrap (example).
 
-   ```bash
-   bash <(curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh) -- --command check-paths
-   ```
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh) -- --command check-paths
+```
 
-1. Backup current machine dotfiles into this repository:
+1. Backup current dotfiles into the repository.
 
-   ```bash
-   ./scripts/backup-dotfiles.sh --clean
-   ```
+```bash
+./scripts/backup-dotfiles.sh --clean
+```
 
-2. Install packages:
+1. Install base packages.
 
-   ```bash
-   ./scripts/install-packages.sh
-   ```
+```bash
+./scripts/install-packages.sh
+```
 
-3. Install base + extended package sets:
+1. Install base and extended packages.
 
-   ```bash
-   ./scripts/install-packages.sh --extended
-   ```
+```bash
+./scripts/install-packages.sh --extended
+```
 
-4. Apply backed up dotfiles to current machine:
+1. Apply tracked dotfiles to the current machine.
 
-   ```bash
-   ./scripts/apply-dotfiles.sh
-   ```
+```bash
+./scripts/apply-dotfiles.sh
+```
 
-5. Use the master script (interactive):
+1. Run the manager in interactive mode.
 
-   ```bash
-   ./scripts/dotfiles-manager.sh
-   ```
+```bash
+./scripts/dotfiles-manager.sh
+```
 
-6. Use the master script (direct command):
+1. Run manager commands directly.
 
-   ```bash
-   ./scripts/dotfiles-manager.sh backup-all-clean
-   ./scripts/dotfiles-manager.sh apply-all
-   ```
+```bash
+./scripts/dotfiles-manager.sh backup-all-clean
+./scripts/dotfiles-manager.sh apply-all
+```
 
-7. Auto-mount available drives (safe mode skips system/root disk partitions):
+1. Auto-mount available drives.
 
-   ```bash
-   ./scripts/auto-mount-drives.sh
-   ```
+```bash
+./scripts/auto-mount-drives.sh
+```
 
-8. Preview what would be mounted without making changes:
+1. Preview mount actions without making changes.
 
-   ```bash
-   ./scripts/auto-mount-drives.sh --dry-run
-   ```
+```bash
+./scripts/auto-mount-drives.sh --dry-run
+```
 
-## Master Script Commands
+## Dotfiles Manager Commands
 
 - `backup-all`
 - `backup-all-clean`
@@ -107,24 +116,23 @@ A clean, repeatable Arch setup with:
 - `auto-mount`
 - `auto-mount-dry-run`
 - `check-paths`
+- `setup-neovim-vscode`
 
-## Customize What Gets Backed Up
+## Customizing Tracked Paths
 
-Edit these files:
+Update the manifests, then run a clean backup.
 
 - `manifests/home-paths.txt`
 - `manifests/config-paths.txt`
-
-Then run:
 
 ```bash
 ./scripts/backup-dotfiles.sh --clean
 ```
 
-## Notes
+## Operational Notes
 
-- Existing files in `$HOME` and `$HOME/.config` with the same name are replaced by `apply-dotfiles.sh`.
-- Use Git to review changes before committing:
+- Applying dotfiles replaces existing files in `$HOME` and `$HOME/.config` when paths overlap.
+- Review repository changes before committing.
 
 ```bash
 git status

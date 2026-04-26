@@ -23,6 +23,7 @@ Commands:
   install-extended
   auto-mount
   auto-mount-dry-run
+  setup-neovim-vscode
   check-paths
   help
 EOF
@@ -73,6 +74,9 @@ run_command() {
     auto-mount-dry-run)
       "$SCRIPT_DIR/auto-mount-drives.sh" --dry-run
       ;;
+    setup-neovim-vscode)
+      "$SCRIPT_DIR/setup-neovim-vscode.sh"
+      ;;
     check-paths)
       "$SCRIPT_DIR/check-manifest-paths.sh"
       ;;
@@ -106,6 +110,7 @@ show_menu() {
     "Install extended packages" \
     "Auto-mount drives" \
     "Auto-mount drives (dry-run)" \
+    "Setup Neovim (VS Code style)" \
     "Check manifest paths" \
     "Quit"; do
     case "$REPLY" in
@@ -122,8 +127,9 @@ show_menu() {
       11) run_command install-extended; break ;;
       12) run_command auto-mount; break ;;
       13) run_command auto-mount-dry-run; break ;;
-      14) run_command check-paths; break ;;
-      15) echo "Bye."; break ;;
+      14) run_command setup-neovim-vscode; break ;;
+      15) run_command check-paths; break ;;
+      16) echo "Bye."; break ;;
       *) echo "Invalid selection." ;;
     esac
   done

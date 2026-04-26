@@ -1,6 +1,16 @@
 # Package Lists
 
-- base-packages.txt: Core tools for development and daily CLI use.
-- extended-packages.txt: Optional desktop/media/dev extras.
+This directory contains package manifests consumed by the installation scripts.
 
-Each line is a package installed through yay.
+- `base-packages.txt`: Core packages for development and daily usage.
+- `extended-packages.txt`: Optional packages for additional desktop and development tooling.
+
+Format:
+
+- One package name per line
+- Empty lines are allowed
+- Lines starting with `#` are treated as comments
+
+Installation source:
+
+- Packages are installed through `yay` by `scripts/install-packages.sh`
