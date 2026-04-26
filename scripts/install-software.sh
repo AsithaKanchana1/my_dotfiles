@@ -267,7 +267,7 @@ show_menu() {
     case "$input_key" in
       $'\x1b[A'|k|K) selected=$(((selected - 1 + total) % total)) ;;
       $'\x1b[B'|j|J) selected=$(((selected + 1) % total)) ;;
-      $'\n'|$'\r')
+      ""|$'\n'|$'\r')
         show_submenu "$selected"
         ;;
       ' ')
