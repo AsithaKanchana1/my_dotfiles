@@ -2,7 +2,4 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-"$SCRIPT_DIR/apply-home.sh"
-"$SCRIPT_DIR/apply-config.sh"
-
-echo "Dotfiles applied to HOME."
+"$SCRIPT_DIR/install-packages.sh" --extended

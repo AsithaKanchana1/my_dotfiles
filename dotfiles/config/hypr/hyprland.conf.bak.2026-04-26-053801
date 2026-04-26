@@ -1,19 +1,11 @@
 #########################################################################################
 # HYPRLAND CONFIGURATION
 #########################################################################################
+
 ################
 ### MONITORS ###
 ################
-
-# Laptop Screen: Resolution, Position, Scale
-# Setting scale to 1 makes text/items as small as possible (native resolution)
-monitor=eDP-1, preferred, auto, 1.25
-
-# External Monitor: Resolution, Position, Scale
-# Setting scale to 1.25 or 1.5 makes things larger/comfortable
-monitor=HDMI-A-1, preferred, auto, 1
-
-# Fallback for any other monitor
+# Leaves the monitor setup to auto-detect the best resolution and refresh rate
 monitor=,preferred,auto,auto
 
 ###################
@@ -32,11 +24,10 @@ $browser = brave              # Default web browser
 exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP &
 exec-once = waybar &          # Starts your top status bar
 exec-once = hyprpaper &       # Starts your wallpaper daemon
-exec-once = nm-applet --indicator # Starts the network/Wi-Fi tray icon
-#exec-once = $browser &        # Auto-launches Brave on boot
+exec-once = nm-applet &       # Starts the network/Wi-Fi tray icon
+exec-once = $browser &        # Auto-launches Brave on boot
 exec-once = $terminal &       # Auto-launches Kitty on boot
-#exec-once = sleep 2 && /usr/lib/polkit-kde-authentication-agent-1 & # Handles admin password prompts (GUI)
-exec-once = swaync
+exec-once = sleep 2 && /usr/lib/polkit-kde-authentication-agent-1 & # Handles admin password prompts (GUI)
 
 #############################
 ### ENVIRONMENT VARIABLES ###
@@ -242,14 +233,4 @@ windowrule {
     match:class = hyprland-run
     move = 20 monitor_h-120
     float = yes # Forces the hyprland-run prompt to float in the bottom left corner
-}
-
-
-# Place this in your hyprland.conf
-windowrule {
-    name = nmtui-float
-    match:class = ^(floating_nmtui)$
-    float = on
-    center = on
-    size = 600 400
 }

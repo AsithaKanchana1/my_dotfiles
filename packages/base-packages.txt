@@ -1,7 +1,6 @@
 kitty
 antigravity
-tmux
-neovim
+nvim
 fzf
 zoxide
 nodejs
@@ -13,3 +12,4 @@ rustup
 rclone
 btop
 htop
+LazyDocker

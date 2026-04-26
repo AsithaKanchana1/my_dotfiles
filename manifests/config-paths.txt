@@ -1,4 +1,5 @@
 dolphinrc
+fish
 gtk-3.0
 htop
 hypr

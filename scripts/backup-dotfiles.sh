@@ -2,56 +2,24 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-HOME_MANIFEST="$REPO_ROOT/manifests/home-paths.txt"
-CONFIG_MANIFEST="$REPO_ROOT/manifests/config-paths.txt"
-DEST_HOME="$REPO_ROOT/dotfiles/home"
-DEST_CONFIG="$REPO_ROOT/dotfiles/config"
 
-clean_dest=0
-
-for arg in "$@"; do
-  case "$arg" in
-    --clean)
-      clean_dest=1
-      ;;
-    *)
-      echo "Unknown argument: $arg"
-      echo "Usage: $0 [--clean]"
-      exit 1
-      ;;
-  esac
-done
-
-mkdir -p "$DEST_HOME" "$DEST_CONFIG"
-
-if [[ "$clean_dest" -eq 1 ]]; then
-  rm -rf "$DEST_HOME"/* "$DEST_CONFIG"/*
+if [[ $# -gt 1 ]]; then
+  echo "Usage: $0 [--clean]" >&2
+  exit 1
 fi
 
-copy_path() {
-  local src="$1"
-  local dest="$2"
+if [[ $# -eq 1 && "$1" != "--clean" ]]; then
+  echo "Unknown argument: $1" >&2
+  echo "Usage: $0 [--clean]" >&2
+  exit 1
+fi
 
-  if [[ ! -e "$src" && ! -L "$src" ]]; then
-    echo "Skipping missing path: $src"
-    return
-  fi
-
-  mkdir -p "$(dirname "$dest")"
-  rm -rf "$dest"
-  cp -a "$src" "$dest"
-  echo "Backed up: $src -> $dest"
-}
-
-while IFS= read -r rel || [[ -n "$rel" ]]; do
-  [[ -z "$rel" || "$rel" =~ ^[[:space:]]*# ]] && continue
-  copy_path "$HOME/$rel" "$DEST_HOME/$rel"
-done < "$HOME_MANIFEST"
-
-while IFS= read -r rel || [[ -n "$rel" ]]; do
-  [[ -z "$rel" || "$rel" =~ ^[[:space:]]*# ]] && continue
-  copy_path "$HOME/.config/$rel" "$DEST_CONFIG/$rel"
-done < "$CONFIG_MANIFEST"
+if [[ $# -eq 1 ]]; then
+  "$SCRIPT_DIR/backup-home.sh" --clean
+  "$SCRIPT_DIR/backup-config.sh" --clean
+else
+  "$SCRIPT_DIR/backup-home.sh"
+  "$SCRIPT_DIR/backup-config.sh"
+fi
 
 echo "Dotfile backup complete."
