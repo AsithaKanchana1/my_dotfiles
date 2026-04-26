@@ -85,6 +85,10 @@ if [[ -n "$RUN_COMMAND" ]]; then
   exec "$TARGET_DIR/scripts/dotfiles-manager.sh" "$RUN_COMMAND"
 elif [[ -n "$RUN_ACTION" ]]; then
   exec "$TARGET_DIR/scripts/dotfiles-manager.sh" --action "$RUN_ACTION"
+elif [[ ! -t 0 && -r /dev/tty ]]; then
+  # When bootstrap is piped (e.g. curl | bash), stdin is not interactive.
+  # Reattach stdin to the user's terminal so the menu can still be used.
+  exec "$TARGET_DIR/scripts/dotfiles-manager.sh" </dev/tty
 elif [[ ! -t 0 ]]; then
   echo "No interactive terminal detected, so the menu cannot read a selection." >&2
   echo "Run bootstrap with --command or --action, for example:" >&2

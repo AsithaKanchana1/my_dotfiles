@@ -7,6 +7,11 @@ Reliable, repeatable Arch Linux dotfile management with:
 - Apply workflow for restoring the same setup on another machine
 - Optional Neovim bootstrap with VS Code-style ergonomics
 
+## Requirements
+
+- Linux environment with `bash`, `git`, and `curl`
+- A terminal (TTY) for interactive menu navigation
+
 ## Core Features
 
 - Manifest-driven backup and restore
@@ -53,6 +58,8 @@ Fish:
 curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash
 ```
 
+The bootstrap script now supports `curl | bash` interactive usage by reattaching to `/dev/tty` when available.
+
 1. Run a direct command through bootstrap (example).
 
 Bash/Zsh:
@@ -65,6 +72,20 @@ Fish:
 
 ```fish
 curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --command check-paths
+```
+
+1. Run a direct menu action number through bootstrap (non-interactive friendly).
+
+Bash/Zsh:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --action 7
+```
+
+Fish:
+
+```fish
+curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --action 7
 ```
 
 1. Backup current dotfiles into the repository.
@@ -102,6 +123,8 @@ curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/sc
 ```bash
 ./scripts/dotfiles-manager.sh backup-all-clean
 ./scripts/dotfiles-manager.sh apply-all
+./scripts/dotfiles-manager.sh --action 15
+./scripts/dotfiles-manager.sh 15
 ```
 
 1. Auto-mount available drives.
@@ -133,6 +156,28 @@ curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/sc
 - `auto-mount-dry-run`
 - `check-paths`
 - `setup-neovim-vscode`
+
+## Interactive Menu Controls
+
+Run interactive mode:
+
+```bash
+./scripts/dotfiles-manager.sh
+```
+
+Controls:
+
+- `↑` / `↓`: Move selection
+- `j` / `k`: Vim-style movement
+- `Enter`: Run selected action
+- `q`: Quit menu
+- `1-16`: Jump directly to an action number
+
+## Bootstrap Execution Modes
+
+- Interactive mode: `bootstrap.sh` launches the menu when a TTY is available.
+- Piped mode (`curl | bash`): bootstrap reattaches stdin to `/dev/tty` when possible, so the menu still works.
+- Non-interactive mode: use `--command` or `--action` for automation, CI, or headless sessions.
 
 ## Customizing Tracked Paths
 
