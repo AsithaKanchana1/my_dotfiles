@@ -138,6 +138,42 @@ show_menu() {
     "Check manifest paths"
     "Quit"
   )
+  local commands=(
+    "backup-all"
+    "backup-all-clean"
+    "backup-home"
+    "backup-home-clean"
+    "backup-config"
+    "backup-config-clean"
+    "apply-all"
+    "apply-home"
+    "apply-config"
+    "install-base"
+    "install-extended"
+    "auto-mount"
+    "auto-mount-dry-run"
+    "setup-neovim-vscode"
+    "check-paths"
+    "quit"
+  )
+  local descriptions=(
+    "Backs up both tracked groups in sequence: home paths from manifests/home-paths.txt and config paths from manifests/config-paths.txt."
+    "Performs a clean backup for both home and config by removing stale repository targets before copying current files."
+    "Backs up only the tracked home paths from manifests/home-paths.txt into dotfiles/home."
+    "Backs up only home paths and removes stale destination files first for a clean snapshot."
+    "Backs up only tracked config paths from manifests/config-paths.txt into dotfiles/config."
+    "Backs up only config paths with cleanup of stale files before copy."
+    "Applies both home and config dotfiles to this machine (restores tracked files into $HOME and $HOME/.config)."
+    "Applies only home dotfiles from dotfiles/home to matching target paths under $HOME."
+    "Applies only config dotfiles from dotfiles/config to matching target paths under $HOME/.config."
+    "Installs packages listed in packages/base-packages.txt."
+    "Installs both base and extended package sets (packages/base-packages.txt and packages/extended-packages.txt)."
+    "Detects and mounts eligible drives using auto-mount logic (writes changes)."
+    "Shows what would be mounted without making changes. Safe for preview and verification."
+    "Bootstraps Neovim with VS Code-style behavior and related language/tooling setup."
+    "Validates manifest path entries against the current system and reports missing/invalid paths."
+    "Exit the manager without running any action."
+  )
   local selected=0
   local total="${#items[@]}"
   local key=""
@@ -160,6 +196,10 @@ show_menu() {
         printf "   %2d) %s\n" "$((i + 1))" "${items[$i]}"
       fi
     done
+
+    echo
+    printf "Selected: %d) %s (%s)\n" "$((selected + 1))" "${items[$selected]}" "${commands[$selected]}"
+    printf "Controls: Enter=run  d=details  q=quit\n"
 
     key=""
     key2=""
@@ -188,6 +228,22 @@ show_menu() {
       q|Q)
         printf '\nBye.\n'
         break
+        ;;
+      d|D)
+        while true; do
+          printf '\033[H\033[2J'
+          echo "Dotfiles Manager - Details"
+          echo "-------------------------"
+          printf "Action: %d) %s\n" "$((selected + 1))" "${items[$selected]}"
+          printf "Command: %s\n\n" "${commands[$selected]}"
+          printf "%s\n\n" "${descriptions[$selected]}"
+          printf "Controls: q=close details\n"
+
+          IFS= read -rsn1 key || true
+          if [[ "$key" == q || "$key" == Q ]]; then
+            break
+          fi
+        done
         ;;
       1)
         IFS= read -rsn1 -t 0.8 key2 || key2=""
