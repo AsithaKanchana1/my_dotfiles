@@ -10,6 +10,11 @@ declare -a CATEGORY_LABELS=()
 declare -a CATEGORY_DESCRIPTIONS=()
 declare -a CATEGORY_FILES=()
 
+# Maps: CATEGORY_KEY -> CSV of packages
+declare -A CATEGORY_PACKAGES=()
+# Maps: PACKAGE_NAME -> 1 (selected) or 0 (unselected)
+declare -A PKG_SELECTED=()
+
 install_yay_if_missing() {
   if command -v yay >/dev/null 2>&1; then
     return
@@ -30,7 +35,8 @@ read_package_file() {
 }
 
 load_catalog() {
-  local key label description file
+  local key label description file package_path pkg
+  local -a pkgs_array
 
   while IFS=$'\t' read -r key label description file; do
     [[ -z "$key" ]] && continue
@@ -39,143 +45,243 @@ load_catalog() {
     CATEGORY_LABELS+=("$label")
     CATEGORY_DESCRIPTIONS+=("$description")
     CATEGORY_FILES+=("$file")
+
+    package_path="$REPO_ROOT/$file"
+    pkgs_array=()
+    if [[ -f "$package_path" ]]; then
+      while IFS= read -r pkg; do
+        [[ -z "$pkg" || "$pkg" =~ ^[[:space:]]*# ]] && continue
+        pkgs_array+=("$pkg")
+        # Default all to 0
+        PKG_SELECTED["$pkg"]=0
+      done < <(grep -vE '^\s*$|^\s*#' "$package_path")
+    fi
+    CATEGORY_PACKAGES["$key"]="$(IFS=,; echo "${pkgs_array[*]}")"
   done < "$CATALOG_INDEX"
 }
 
-count_selected() {
-  local -n selected_ref=$1
-  local count=0
-  local value
+set_category_selected() {
+  local key="$1"
+  local val="$2"
+  local pkg
+  local pkgs="${CATEGORY_PACKAGES["$key"]:-}"
+  if [[ -n "$pkgs" ]]; then
+    IFS=',' read -r -a pkgs_array <<< "$pkgs"
+    for pkg in "${pkgs_array[@]}"; do
+      PKG_SELECTED["$pkg"]="$val"
+    done
+  fi
+}
 
-  for value in "${selected_ref[@]}"; do
-    if [[ "$value" -eq 1 ]]; then
+get_category_selected_count() {
+  local key="$1"
+  local count=0
+  local pkg
+  local pkgs="${CATEGORY_PACKAGES["$key"]:-}"
+  if [[ -n "$pkgs" ]]; then
+    IFS=',' read -r -a pkgs_array <<< "$pkgs"
+    for pkg in "${pkgs_array[@]}"; do
+      if [[ "${PKG_SELECTED["$pkg"]}" -eq 1 ]]; then
+        count=$((count + 1))
+      fi
+    done
+  fi
+  echo "$count"
+}
+
+get_category_total_count() {
+  local key="$1"
+  local pkgs="${CATEGORY_PACKAGES["$key"]:-}"
+  if [[ -z "$pkgs" ]]; then
+    echo "0"
+  else
+    IFS=',' read -r -a pkgs_array <<< "$pkgs"
+    echo "${#pkgs_array[@]}"
+  fi
+}
+
+get_total_selected_count() {
+  local count=0
+  local pkg
+  for pkg in "${!PKG_SELECTED[@]}"; do
+    if [[ "${PKG_SELECTED["$pkg"]}" -eq 1 ]]; then
       count=$((count + 1))
     fi
   done
-
-  printf '%s' "$count"
+  echo "$count"
 }
 
-install_category_file() {
-  local file="$1"
-  local label="$2"
-  local package_path="$REPO_ROOT/$file"
+list_catalog() {
+  local i key
+  for ((i = 0; i < ${#CATEGORY_KEYS[@]}; i++)); do
+    key="${CATEGORY_KEYS[$i]}"
+    printf '%-24s %s\n' "$key" "${CATEGORY_LABELS[$i]}"
+  done
+}
 
-  read_package_file "$package_path"
-  if ((${#PKGS[@]} == 0)); then
-    echo "Skipping empty category: $label"
+show_submenu() {
+  local cat_index="$1"
+  local key="${CATEGORY_KEYS[$cat_index]}"
+  local label="${CATEGORY_LABELS[$cat_index]}"
+  local pkgs="${CATEGORY_PACKAGES["$key"]:-}"
+  local -a pkgs_array=()
+  
+  if [[ -n "$pkgs" ]]; then
+    IFS=',' read -r -a pkgs_array <<< "$pkgs"
+  fi
+
+  local total="${#pkgs_array[@]}"
+  if (( total == 0 )); then
+    echo "No packages in this category."
+    sleep 1
     return
   fi
 
-  echo "Installing $label..."
-  yay -S --noconfirm --needed "${PKGS[@]}"
-}
-
-show_details() {
-  local index="$1"
-  local package_path="$REPO_ROOT/${CATEGORY_FILES[$index]}"
-  local pkg
-
-  printf '\033[H\033[2J'
-  echo "Software Catalog - Details"
-  echo "--------------------------"
-  printf "Category: %s\n" "${CATEGORY_LABELS[$index]}"
-  printf "Key: %s\n\n" "${CATEGORY_KEYS[$index]}"
-  printf "%s\n\n" "${CATEGORY_DESCRIPTIONS[$index]}"
-  echo "Packages:"
-
-  while IFS= read -r pkg; do
-    [[ -z "$pkg" || "$pkg" =~ ^[[:space:]]*# ]] && continue
-    printf '  - %s\n' "$pkg"
-  done < <(grep -vE '^\s*$|^\s*#' "$package_path")
-
-  echo
-  echo "Controls: q=close details"
-}
-
-show_menu() {
   local selected=0
-  local total="${#CATEGORY_KEYS[@]}"
-  local key=""
+  local input_key=""
   local key2=""
   local key3=""
-  local i
-  local -a chosen=()
-
-  for ((i = 0; i < total; i++)); do
-    chosen+=(0)
-  done
-
-  for ((i = 0; i < total; i++)); do
-    if [[ "${CATEGORY_KEYS[$i]}" == core ]]; then
-      chosen[$i]=1
-    fi
-  done
+  local i pkg
 
   while true; do
     printf '\033[H\033[2J'
-    echo "Software Catalog"
-    echo "----------------"
-    echo "Use ↑/↓ (or j/k), Space to toggle, Enter to install, d for details, a for all, n for none, q to quit."
+    echo "Software Catalog > $label"
+    echo "--------------------------------------------------------"
+    echo "Use ↑/↓ (or j/k), Space to toggle, a=all, n=none, q=back(save), x=back(clear)."
     echo
 
     for ((i = 0; i < total; i++)); do
+      pkg="${pkgs_array[$i]}"
       if [[ "$i" -eq "$selected" ]]; then
-        if [[ "${chosen[$i]}" -eq 1 ]]; then
-          printf " > [x] %-24s %s (%s)\n" "${CATEGORY_KEYS[$i]}" "${CATEGORY_LABELS[$i]}" "${CATEGORY_DESCRIPTIONS[$i]}"
+        if [[ "${PKG_SELECTED["$pkg"]}" -eq 1 ]]; then
+          printf " > [x] %s\n" "$pkg"
         else
-          printf " > [ ] %-24s %s (%s)\n" "${CATEGORY_KEYS[$i]}" "${CATEGORY_LABELS[$i]}" "${CATEGORY_DESCRIPTIONS[$i]}"
+          printf " > [ ] %s\n" "$pkg"
         fi
       else
-        if [[ "${chosen[$i]}" -eq 1 ]]; then
-          printf "   [x] %-24s %s\n" "${CATEGORY_KEYS[$i]}" "${CATEGORY_LABELS[$i]}"
+        if [[ "${PKG_SELECTED["$pkg"]}" -eq 1 ]]; then
+          printf "   [x] %s\n" "$pkg"
         else
-          printf "   [ ] %-24s %s\n" "${CATEGORY_KEYS[$i]}" "${CATEGORY_LABELS[$i]}"
+          printf "   [ ] %s\n" "$pkg"
         fi
       fi
     done
 
     echo
-    printf "Selected categories: %s/%d\n" "$(count_selected chosen)" "$total"
-    printf "Footer: Enter=install  Space=toggle  d=details  a=all  n=none  q=quit\n"
+    printf "Category Selection: %d/%d\n" "$(get_category_selected_count "$key")" "$total"
+    printf "Footer: Space=toggle  a=all  n=none  q=back(save)  x=back(clear)\n"
 
-    key=""
+    input_key=""
     key2=""
     key3=""
-    IFS= read -rsn1 key || true
-    if [[ "$key" == $'\x1b' ]]; then
+    IFS= read -rsn1 input_key || true
+    if [[ "$input_key" == $'\x1b' ]]; then
       IFS= read -rsn1 -t 0.05 key2 || key2=""
       IFS= read -rsn1 -t 0.05 key3 || key3=""
-      key+="$key2$key3"
+      input_key+="$key2$key3"
     fi
 
-    case "$key" in
-      $'\x1b[A'|k|K)
-        selected=$(((selected - 1 + total) % total))
-        ;;
-      $'\x1b[B'|j|J)
-        selected=$(((selected + 1) % total))
-        ;;
+    case "$input_key" in
+      $'\x1b[A'|k|K) selected=$(((selected - 1 + total) % total)) ;;
+      $'\x1b[B'|j|J) selected=$(((selected + 1) % total)) ;;
       ' ')
-        chosen[$selected]=$((1 - chosen[$selected]))
+        pkg="${pkgs_array[$selected]}"
+        PKG_SELECTED["$pkg"]=$((1 - PKG_SELECTED["$pkg"]))
         ;;
       a|A)
-        for ((i = 0; i < total; i++)); do
-          chosen[$i]=1
+        for pkg in "${pkgs_array[@]}"; do
+          PKG_SELECTED["$pkg"]=1
         done
         ;;
-      n|N)
-        for ((i = 0; i < total; i++)); do
-          chosen[$i]=0
+      n|N|c|C)
+        for pkg in "${pkgs_array[@]}"; do
+          PKG_SELECTED["$pkg"]=0
         done
         ;;
-      d|D)
-        while true; do
-          show_details "$selected"
-          IFS= read -rsn1 key || true
-          if [[ "$key" == q || "$key" == Q ]]; then
-            break
-          fi
+      q|Q)
+        return
+        ;;
+      x|X)
+        for pkg in "${pkgs_array[@]}"; do
+          PKG_SELECTED["$pkg"]=0
+        done
+        return
+        ;;
+      *) ;;
+    esac
+  done
+}
+
+show_menu() {
+  local selected=0
+  local total="${#CATEGORY_KEYS[@]}"
+  local input_key=""
+  local key2=""
+  local key3=""
+  local i key cat_sel cat_tot
+
+  # Preselect core
+  set_category_selected "core" 1
+
+  while true; do
+    printf '\033[H\033[2J'
+    echo "Software Catalog - Main Menu"
+    echo "----------------------------"
+    echo "Use ↑/↓, Enter to open category, Space to toggle all, i to install, c to clear, q to quit."
+    echo
+
+    for ((i = 0; i < total; i++)); do
+      key="${CATEGORY_KEYS[$i]}"
+      cat_sel="$(get_category_selected_count "$key")"
+      cat_tot="$(get_category_total_count "$key")"
+      
+      if [[ "$i" -eq "$selected" ]]; then
+        if [[ "$cat_sel" -gt 0 ]]; then
+          printf " > [x] %-24s %s [%d/%d selected]\n" "$key" "${CATEGORY_LABELS[$i]}" "$cat_sel" "$cat_tot"
+        else
+          printf " > [ ] %-24s %s [%d/%d selected]\n" "$key" "${CATEGORY_LABELS[$i]}" "$cat_sel" "$cat_tot"
+        fi
+      else
+        if [[ "$cat_sel" -gt 0 ]]; then
+          printf "   [x] %-24s %s [%d/%d]\n" "$key" "${CATEGORY_LABELS[$i]}" "$cat_sel" "$cat_tot"
+        else
+          printf "   [ ] %-24s %s [%d/%d]\n" "$key" "${CATEGORY_LABELS[$i]}" "$cat_sel" "$cat_tot"
+        fi
+      fi
+    done
+
+    echo
+    printf "Total Packages Selected: %d\n" "$(get_total_selected_count)"
+    printf "Footer: Enter=open  Space=toggle_all  i=install  c=clear  q=quit\n"
+
+    input_key=""
+    key2=""
+    key3=""
+    IFS= read -rsn1 input_key || true
+    if [[ "$input_key" == $'\x1b' ]]; then
+      IFS= read -rsn1 -t 0.05 key2 || key2=""
+      IFS= read -rsn1 -t 0.05 key3 || key3=""
+      input_key+="$key2$key3"
+    fi
+
+    case "$input_key" in
+      $'\x1b[A'|k|K) selected=$(((selected - 1 + total) % total)) ;;
+      $'\x1b[B'|j|J) selected=$(((selected + 1) % total)) ;;
+      $'\n'|$'\r')
+        show_submenu "$selected"
+        ;;
+      ' ')
+        key="${CATEGORY_KEYS[$selected]}"
+        cat_sel="$(get_category_selected_count "$key")"
+        if [[ "$cat_sel" -gt 0 ]]; then
+          set_category_selected "$key" 0
+        else
+          set_category_selected "$key" 1
+        fi
+        ;;
+      c|C)
+        for pkg in "${!PKG_SELECTED[@]}"; do
+          PKG_SELECTED["$pkg"]=0
         done
         ;;
       q|Q)
@@ -183,28 +289,31 @@ show_menu() {
         echo "Bye."
         break
         ;;
-      $'\n'|$'\r')
-        if [[ "$(count_selected chosen)" -eq 0 ]]; then
-          printf '\nSelect at least one category with Space or press a to select all.\n'
-          IFS= read -rsn1 key || true
+      i|I)
+        if [[ "$(get_total_selected_count)" -eq 0 ]]; then
+          printf '\nSelect at least one package before installing.\n'
+          sleep 1
           continue
         fi
 
         echo
-        echo "Installing selected categories..."
-        for ((i = 0; i < total; i++)); do
-          if [[ "${chosen[$i]}" -eq 1 ]]; then
-            install_category_file "${CATEGORY_FILES[$i]}" "${CATEGORY_LABELS[$i]}"
+        echo "Installing selected packages..."
+        local -a final_pkgs=()
+        for pkg in "${!PKG_SELECTED[@]}"; do
+          if [[ "${PKG_SELECTED["$pkg"]}" -eq 1 ]]; then
+            final_pkgs+=("$pkg")
           fi
         done
+        
+        yay -S --noconfirm --needed "${final_pkgs[@]}"
+        
         if command -v rustup >/dev/null 2>&1; then
           rustup default stable
         fi
         echo "Package installation complete."
         break
         ;;
-      *)
-        ;;
+      *) ;;
     esac
   done
 }
@@ -216,13 +325,23 @@ run_selected_categories() {
   IFS=',' read -r -a requested <<< "$categories_csv"
 
   for key in "${requested[@]}"; do
-    for ((i = 0; i < ${#CATEGORY_KEYS[@]}; i++)); do
-      if [[ "${CATEGORY_KEYS[$i]}" == "$key" ]]; then
-        install_category_file "${CATEGORY_FILES[$i]}" "${CATEGORY_LABELS[$i]}"
-        break
-      fi
-    done
+    set_category_selected "$key" 1
   done
+
+  local -a final_pkgs=()
+  for pkg in "${!PKG_SELECTED[@]}"; do
+    if [[ "${PKG_SELECTED["$pkg"]}" -eq 1 ]]; then
+      final_pkgs+=("$pkg")
+    fi
+  done
+
+  if ((${#final_pkgs[@]} == 0)); then
+    echo "No packages found for categories: $categories_csv"
+    return
+  fi
+
+  echo "Installing selected categories..."
+  yay -S --noconfirm --needed "${final_pkgs[@]}"
 
   if command -v rustup >/dev/null 2>&1; then
     rustup default stable
@@ -285,8 +404,18 @@ EOF
   if [[ "$install_all" -eq 1 ]]; then
     local i
     for ((i = 0; i < ${#CATEGORY_KEYS[@]}; i++)); do
-      install_category_file "${CATEGORY_FILES[$i]}" "${CATEGORY_LABELS[$i]}"
+      set_category_selected "${CATEGORY_KEYS[$i]}" 1
     done
+    
+    local -a final_pkgs=()
+    for pkg in "${!PKG_SELECTED[@]}"; do
+      if [[ "${PKG_SELECTED["$pkg"]}" -eq 1 ]]; then
+        final_pkgs+=("$pkg")
+      fi
+    done
+    
+    yay -S --noconfirm --needed "${final_pkgs[@]}"
+    
     if command -v rustup >/dev/null 2>&1; then
       rustup default stable
     fi
