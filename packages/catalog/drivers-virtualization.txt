@@ -1,0 +1,10 @@
+qemu-full
+virt-manager
+virt-viewer
+spice-vdagent
+spice-gtk
+open-vm-tools
+virtualbox-guest-utils
+dnsmasq
+bridge-utils
+libvirt

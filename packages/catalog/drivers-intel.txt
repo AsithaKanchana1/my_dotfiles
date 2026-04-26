@@ -1,0 +1,7 @@
+mesa
+vulkan-intel
+intel-media-driver
+intel-compute-runtime
+libva-intel-driver
+vulkan-tools
+mesa-utils

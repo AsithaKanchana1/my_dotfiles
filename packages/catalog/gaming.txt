@@ -1,0 +1,10 @@
+steam
+lutris
+heroic-games-launcher-bin
+mangohud
+gamescope
+wine
+winetricks
+protonup-qt
+gamemode
+lib32-gamemode

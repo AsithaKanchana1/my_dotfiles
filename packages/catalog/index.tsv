@@ -1,0 +1,13 @@
+core	Core workstation essentials	Essential shell, editor, and system tools for everyday use.	packages/catalog/core.txt
+development	Development toolchain	Programming languages, build tools, containers, and database clients.	packages/catalog/development.txt
+desktop	Desktop and shell integration	Wayland, Hyprland, status bar, clipboard, and desktop integration tools.	packages/catalog/desktop.txt
+media	Media and creative apps	Audio, video, image, and streaming tools.	packages/catalog/media.txt
+internet	Internet and communication	Browsers, remote access, chat, and web tooling.	packages/catalog/internet.txt
+system	System maintenance	Disk, monitoring, recovery, and power tools.	packages/catalog/system.txt
+drivers-intel	Intel drivers	Intel graphics, media, and compute support.	packages/catalog/drivers-intel.txt
+drivers-amd	AMD drivers	AMD graphics and compute support.	packages/catalog/drivers-amd.txt
+drivers-nvidia	NVIDIA drivers	NVIDIA graphics stack and related utilities.	packages/catalog/drivers-nvidia.txt
+drivers-virtualization	Virtualization and guest tools	VM guest integration and virtualization management tools.	packages/catalog/drivers-virtualization.txt
+drivers-printing	Printing and scanning	Printer, scanner, and document support.	packages/catalog/drivers-printing.txt
+gaming	Gaming stack	Steam, launchers, game tools, and performance overlays.	packages/catalog/gaming.txt
+productivity	Productivity and office	Office, notes, PDF, and planning tools.	packages/catalog/productivity.txt

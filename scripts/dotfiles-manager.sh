@@ -20,8 +20,7 @@ Commands:
   apply-all
   apply-home
   apply-config
-  install-base
-  install-extended
+  install-software
   auto-mount
   auto-mount-dry-run
   setup-neovim-vscode
@@ -43,13 +42,12 @@ run_action_number() {
     7) run_command apply-all ;;
     8) run_command apply-home ;;
     9) run_command apply-config ;;
-    10) run_command install-base ;;
-    11) run_command install-extended ;;
-    12) run_command auto-mount ;;
-    13) run_command auto-mount-dry-run ;;
-    14) run_command setup-neovim-vscode ;;
-    15) run_command check-paths ;;
-    16) echo "Bye." ;;
+    10) run_command install-software ;;
+    11) run_command auto-mount ;;
+    12) run_command auto-mount-dry-run ;;
+    13) run_command setup-neovim-vscode ;;
+    14) run_command check-paths ;;
+    15) echo "Bye." ;;
     *)
       echo "Unknown action number: $action" >&2
       return 1
@@ -90,11 +88,8 @@ run_command() {
     apply-config)
       "$SCRIPT_DIR/apply-config.sh"
       ;;
-    install-base)
-      "$SCRIPT_DIR/install-base-packages.sh"
-      ;;
-    install-extended)
-      "$SCRIPT_DIR/install-extended-packages.sh"
+    install-software)
+      "$SCRIPT_DIR/install-software.sh"
       ;;
     auto-mount)
       "$SCRIPT_DIR/auto-mount-drives.sh"
@@ -130,8 +125,7 @@ show_menu() {
     "Apply all"
     "Apply home"
     "Apply config"
-    "Install base packages"
-    "Install extended packages"
+    "Install software (interactive)"
     "Auto-mount drives"
     "Auto-mount drives (dry-run)"
     "Setup Neovim (VS Code style)"
@@ -148,8 +142,7 @@ show_menu() {
     "apply-all"
     "apply-home"
     "apply-config"
-    "install-base"
-    "install-extended"
+    "install-software"
     "auto-mount"
     "auto-mount-dry-run"
     "setup-neovim-vscode"
@@ -166,8 +159,7 @@ show_menu() {
     "Applies both home and config dotfiles to this machine (restores tracked files into $HOME and $HOME/.config)."
     "Applies only home dotfiles from dotfiles/home to matching target paths under $HOME."
     "Applies only config dotfiles from dotfiles/config to matching target paths under $HOME/.config."
-    "Installs packages listed in packages/base-packages.txt."
-    "Installs both base and extended package sets (packages/base-packages.txt and packages/extended-packages.txt)."
+    "Interactively select and install software from categorized catalogs."
     "Detects and mounts eligible drives using auto-mount logic (writes changes)."
     "Shows what would be mounted without making changes. Safe for preview and verification."
     "Bootstraps Neovim with VS Code-style behavior and related language/tooling setup."

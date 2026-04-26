@@ -1,201 +1,130 @@
-# Arch Dotfiles
+# 🐧 Arch Linux Dotfiles
 
-Reliable, repeatable Arch Linux dotfile management with:
+> Reliable, repeatable, and interactive Arch Linux environment management.
 
-- Package installation from curated lists
-- Backup of selected home and config paths
-- Apply workflow for restoring the same setup on another machine
-- Optional Neovim bootstrap with VS Code-style ergonomics
+A comprehensive, script-driven ecosystem for bootstrapping new Arch Linux installations, managing your software stack interactively, and keeping your configuration files perfectly synchronized across machines.
 
-## Requirements
+---
 
-- Linux environment with `bash`, `git`, and `curl`
-- A terminal (TTY) for interactive menu navigation
+## ✨ Core Features
 
-## Core Features
+- **Manifest-Driven Synchronization**: Backup and apply only the files you explicitly track via clean configuration manifests.
+- **Interactive Software Catalog**: Browse, categorize, and install software (including proprietary drivers and development tools) through an interactive TTY menu.
+- **Automated Drive Mounting**: Safe auto-mounting support for your partitions with preview (`dry-run`) capabilities.
+- **Neovim Bootstrapping**: Automatically configure Neovim with an optimized, VS Code-like setup for immediate productivity.
+- **Reproducibility**: Script-first workflows designed for zero-hassle environment portability.
 
-- Manifest-driven backup and restore
-- Script-first workflow for automation and reproducibility
-- Interactive manager for day-to-day operations
-- Safe drive auto-mount support with dry-run mode
+---
 
-## Project Structure
+## 🚀 Quick Start (Bootstrap)
 
-- `scripts/install-packages.sh`: Install packages from list files in `packages/`
-- `scripts/install-base-packages.sh`: Install only base packages
-- `scripts/install-extended-packages.sh`: Install base and extended packages
-- `scripts/backup-home.sh`: Backup paths listed in `manifests/home-paths.txt`
-- `scripts/backup-config.sh`: Backup paths listed in `manifests/config-paths.txt`
-- `scripts/backup-dotfiles.sh`: Run home and config backups together
-- `scripts/apply-home.sh`: Apply tracked home dotfiles
-- `scripts/apply-config.sh`: Apply tracked config dotfiles
-- `scripts/apply-dotfiles.sh`: Run home and config apply together
-- `scripts/auto-mount-drives.sh`: Auto-mount eligible partitions via `udisksctl`
-- `scripts/check-manifest-paths.sh`: Validate manifest entries against the current system
-- `scripts/setup-neovim-vscode.sh`: Configure Neovim with VS Code-like behavior and language tooling
-- `scripts/dotfiles-manager.sh`: Central command runner with menu and direct modes
-- `scripts/bootstrap.sh`: Clone or update from GitHub and launch manager
-- `packages/base-packages.txt`: Base package catalog
-- `packages/extended-packages.txt`: Optional package catalog
-- `manifests/home-paths.txt`: Paths under `$HOME` to track
-- `manifests/config-paths.txt`: Paths under `$HOME/.config` to track
-- `dotfiles/home`: Versioned home dotfiles
-- `dotfiles/config`: Versioned config dotfiles
+To instantly clone this repository and launch the interactive manager on a new machine, run the following one-liner in your terminal:
 
-## Quick Start
-
-1. Bootstrap from GitHub and open the manager menu.
-
-Bash/Zsh:
-
+**Bash / Zsh / Fish:**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash
 ```
+> **Note**: The bootstrap script supports `curl | bash` interactive usage by automatically reattaching to `/dev/tty` when available, ensuring the menu works smoothly.
 
-Fish:
+---
 
-```fish
-curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash
-```
+## 🛠️ Usage & Common Workflows
 
-The bootstrap script now supports `curl | bash` interactive usage by reattaching to `/dev/tty` when available.
+You can manage your entire setup either through the interactive menu or by calling specific scripts directly.
 
-1. Run a direct command through bootstrap (example).
-
-Bash/Zsh:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --command check-paths
-```
-
-Fish:
-
-```fish
-curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --command check-paths
-```
-
-1. Run a direct menu action number through bootstrap (non-interactive friendly).
-
-Bash/Zsh:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --action 7
-```
-
-Fish:
-
-```fish
-curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --action 7
-```
-
-1. Backup current dotfiles into the repository.
-
-```bash
-./scripts/backup-dotfiles.sh --clean
-```
-
-1. Install base packages.
-
-```bash
-./scripts/install-packages.sh
-```
-
-1. Install base and extended packages.
-
-```bash
-./scripts/install-packages.sh --extended
-```
-
-1. Apply tracked dotfiles to the current machine.
-
-```bash
-./scripts/apply-dotfiles.sh
-```
-
-1. Run the manager in interactive mode.
-
+### 1. The Interactive Manager
+The recommended way to manage your system is via the central manager menu.
 ```bash
 ./scripts/dotfiles-manager.sh
 ```
-
-1. Run manager commands directly.
-
-```bash
-./scripts/dotfiles-manager.sh backup-all-clean
-./scripts/dotfiles-manager.sh apply-all
-./scripts/dotfiles-manager.sh --action 15
-./scripts/dotfiles-manager.sh 15
-```
-
-1. Auto-mount available drives.
-
-```bash
-./scripts/auto-mount-drives.sh
-```
-
-1. Preview mount actions without making changes.
-
-```bash
-./scripts/auto-mount-drives.sh --dry-run
-```
-
-## Dotfiles Manager Commands
-
-- `backup-all`
-- `backup-all-clean`
-- `backup-home`
-- `backup-home-clean`
-- `backup-config`
-- `backup-config-clean`
-- `apply-all`
-- `apply-home`
-- `apply-config`
-- `install-base`
-- `install-extended`
-- `auto-mount`
-- `auto-mount-dry-run`
-- `check-paths`
-- `setup-neovim-vscode`
-
-## Interactive Menu Controls
-
-Run interactive mode:
-
-```bash
-./scripts/dotfiles-manager.sh
-```
-
-Controls:
-
-- `↑` / `↓`: Move selection
-- `j` / `k`: Vim-style movement
-- `Enter`: Run selected action
+**Controls**:
+- `↑` / `↓` or `j` / `k`: Move selection
+- `Enter`: Run the selected action
 - `q`: Quit menu
 - `1-16`: Jump directly to an action number
 
-## Bootstrap Execution Modes
-
-- Interactive mode: `bootstrap.sh` launches the menu when a TTY is available.
-- Piped mode (`curl | bash`): bootstrap reattaches stdin to `/dev/tty` when possible, so the menu still works.
-- Non-interactive mode: use `--command` or `--action` for automation, CI, or headless sessions.
-
-## Customizing Tracked Paths
-
-Update the manifests, then run a clean backup.
-
-- `manifests/home-paths.txt`
-- `manifests/config-paths.txt`
-
+### 2. Software Installation
+Install software and drivers from curated, categorized lists.
 ```bash
+# Launch the interactive software selector
+./scripts/install-software.sh
+
+# Or install specific categories directly (non-interactive)
+./scripts/install-software.sh --categories core,development,desktop
+```
+
+### 3. Dotfiles Synchronization
+Backup your current system configurations to the repository, or apply the repository configurations to your machine.
+
+**Backup to Repository:**
+```bash
+# Backup both home and config paths, removing stale tracking files first
 ./scripts/backup-dotfiles.sh --clean
 ```
 
-## Operational Notes
+**Apply to System:**
+```bash
+# Apply tracked dotfiles, replacing existing files in $HOME and $HOME/.config
+./scripts/apply-dotfiles.sh
+```
 
-- Applying dotfiles replaces existing files in `$HOME` and `$HOME/.config` when paths overlap.
-- Review repository changes before committing.
+### 4. Auto-Mounting Drives
+Easily mount eligible secondary drives using `udisksctl`.
+```bash
+# Preview what would be mounted (Dry Run)
+./scripts/auto-mount-drives.sh --dry-run
+
+# Actually mount the drives
+./scripts/auto-mount-drives.sh
+```
+
+---
+
+## 📁 Repository Structure
+
+### Scripts & Automation
+| Script | Purpose |
+|--------|---------|
+| `bootstrap.sh` | Clone or update from GitHub and launch the manager. |
+| `dotfiles-manager.sh` | Central interactive TTY runner for all scripts. |
+| `install-software.sh` | Interactively install categorized software and drivers. |
+| `apply-dotfiles.sh` | Wrapper to apply both home and config dotfiles. |
+| `backup-dotfiles.sh` | Wrapper to backup both home and config dotfiles. |
+| `auto-mount-drives.sh` | Auto-mount eligible partitions. |
+| `setup-neovim-vscode.sh`| Configure Neovim with VS Code-like behavior. |
+| `check-manifest-paths.sh`| Validate manifest entries against the current system. |
+
+### Configuration & Data
+| Path | Purpose |
+|------|---------|
+| `packages/catalog/` | Contains categorized software and driver lists (`core.txt`, `media.txt`, etc.). |
+| `manifests/home-paths.txt`| Specific paths under `$HOME` to track and backup. |
+| `manifests/config-paths.txt`| Specific paths under `$HOME/.config` to track and backup. |
+| `dotfiles/home/` | The actual versioned home dotfiles. |
+| `dotfiles/config/` | The actual versioned config dotfiles. |
+
+---
+
+## ⚙️ Advanced: Non-Interactive Automation
+
+The `bootstrap.sh` and `dotfiles-manager.sh` scripts support direct command execution for CI/CD or headless automation:
 
 ```bash
-git status
-git diff
+# Run a specific command by name
+./scripts/dotfiles-manager.sh backup-all-clean
+./scripts/dotfiles-manager.sh apply-all
+
+# Run a specific menu action by number
+./scripts/dotfiles-manager.sh --action 10
+
+# Through the bootstrap script
+curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --command check-paths
 ```
+
+---
+
+## 📝 Operational Notes
+
+- **Customizing Tracked Paths**: To track a new dotfile, simply add its path to the respective manifest (`manifests/home-paths.txt` or `manifests/config-paths.txt`), then run `./scripts/backup-dotfiles.sh --clean`.
+- **Applying Overwrites**: Applying dotfiles will **overwrite** existing files on the target machine when paths overlap.
+- **Git Version Control**: Always review your repository changes (`git status`, `git diff`) before committing backups.

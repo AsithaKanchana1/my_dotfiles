@@ -1,0 +1,15 @@
+firefox
+brave-bin
+chromium
+telegram-desktop
+discord
+thunderbird
+remmina
+rustdesk
+filezilla
+postman-bin
+yt-dlp
+signal-desktop
+teamviewer
+openvpn
+networkmanager

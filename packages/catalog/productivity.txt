@@ -1,0 +1,10 @@
+libreoffice-fresh
+onlyoffice-bin
+xournalpp
+pdfarranger
+okular
+obsidian
+anki
+mousepad
+kcalc
+planner

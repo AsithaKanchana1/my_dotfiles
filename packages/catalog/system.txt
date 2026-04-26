@@ -1,0 +1,16 @@
+gparted
+parted
+dosfstools
+ntfs-3g
+smartmontools
+nvtop
+timeshift
+bleachbit
+stacer
+lsof
+powertop
+tlp
+linux-firmware
+bluez
+bluez-utils
+unrar
