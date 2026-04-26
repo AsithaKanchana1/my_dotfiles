@@ -41,14 +41,30 @@ Reliable, repeatable Arch Linux dotfile management with:
 
 1. Bootstrap from GitHub and open the manager menu.
 
+Bash/Zsh:
+
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh)
+curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash
+```
+
+Fish:
+
+```fish
+curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash
 ```
 
 1. Run a direct command through bootstrap (example).
 
+Bash/Zsh:
+
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh) -- --command check-paths
+curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --command check-paths
+```
+
+Fish:
+
+```fish
+curl -fsSL https://raw.githubusercontent.com/AsithaKanchana1/my_dotfiles/main/scripts/bootstrap.sh | bash -s -- --command check-paths
 ```
 
 1. Backup current dotfiles into the repository.
