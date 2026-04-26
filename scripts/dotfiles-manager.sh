@@ -141,6 +141,8 @@ show_menu() {
   local selected=0
   local total="${#items[@]}"
   local key=""
+  local key2=""
+  local key3=""
   local i
   local action_number
 
@@ -159,10 +161,15 @@ show_menu() {
       fi
     done
 
+    key=""
+    key2=""
+    key3=""
     IFS= read -rsn1 key || true
     if [[ "$key" == $'\x1b' ]]; then
-      # Consume the remaining bytes of escape sequences such as arrow keys.
-      IFS= read -rsn2 -t 0.01 key || true
+      # Read the full escape sequence for special keys such as arrows.
+      IFS= read -rsn1 -t 0.05 key2 || key2=""
+      IFS= read -rsn1 -t 0.05 key3 || key3=""
+      key+="$key2$key3"
     fi
 
     case "$key" in
@@ -172,9 +179,9 @@ show_menu() {
       $'\x1b[B'|j|J)
         selected=$(((selected + 1) % total))
         ;;
-      $'\n'|$'\r')
+      ""|$'\n'|$'\r')
         action_number="$((selected + 1))"
-        printf '\n'
+        printf '\nRunning: %s\n\n' "${items[$selected]}"
         run_action_number "$action_number"
         break
         ;;
@@ -182,25 +189,31 @@ show_menu() {
         printf '\nBye.\n'
         break
         ;;
-      [1-9])
-        if (( key <= total )); then
-          printf '\n'
-          run_action_number "$key"
-          break
-        fi
-        ;;
       1)
-        IFS= read -rsn1 -t 0.8 key || key=""
-        case "$key" in
+        IFS= read -rsn1 -t 0.8 key2 || key2=""
+        case "$key2" in
           [0-6])
-            action_number="1$key"
+            action_number="1$key2"
             printf '\n'
+            printf 'Running: %s\n\n' "${items[$((action_number - 1))]}"
             run_action_number "$action_number"
             break
             ;;
           *)
+            printf '\n'
+            printf 'Running: %s\n\n' "${items[0]}"
+            run_action_number "1"
+            break
             ;;
         esac
+        ;;
+      [2-9])
+        if (( key <= total )); then
+          printf '\n'
+          printf 'Running: %s\n\n' "${items[$((key - 1))]}"
+          run_action_number "$key"
+          break
+        fi
         ;;
       *)
         ;;
