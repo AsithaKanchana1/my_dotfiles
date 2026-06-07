@@ -2,95 +2,126 @@
 
 ## Standard Workflow
 
-1. Backup current dotfiles.
+### 1. Backup current dotfiles
 
 ```bash
 ./scripts/backup-dotfiles.sh --clean
 ```
 
-1. Install packages.
+### 2. Install packages
 
-Base packages:
-
-```bash
-./scripts/install-packages.sh
-```
-
-Base and extended packages:
+Launch the interactive software selector:
 
 ```bash
-./scripts/install-packages.sh --extended
+./scripts/install-software.sh
 ```
 
-1. Apply dotfiles to a machine.
+Install specific categories directly (non-interactive):
+
+```bash
+./scripts/install-software.sh --categories core,development,desktop
+```
+
+Install all categories at once:
+
+```bash
+./scripts/install-software.sh --all
+```
+
+### 3. Apply dotfiles to a machine
 
 ```bash
 ./scripts/apply-dotfiles.sh
 ```
 
+---
+
 ## Updating Tracked Dotfiles
 
-1. Edit manifests.
+1. Edit the relevant manifest:
+   - `manifests/home-paths.txt` — files under `$HOME`
+   - `manifests/config-paths.txt` — directories/files under `$HOME/.config`
 
-- `manifests/home-paths.txt`
-- `manifests/config-paths.txt`
-
-1. Re-run clean backup.
+2. Re-run a clean backup to sync the repo:
 
 ```bash
 ./scripts/backup-dotfiles.sh --clean
 ```
 
-1. Commit the resulting updates.
+3. Commit the resulting updates:
 
 ```bash
 git add .
 git commit -m "Update dotfiles backup"
+git push
 ```
 
-## Neovim Setup (VS Code Style)
+---
 
-Run:
+## Neovim Setup (VS Code Style)
 
 ```bash
 ./scripts/setup-neovim-vscode.sh
 ```
 
-Behavior:
+**Behavior:**
+- Installs Neovim dependencies via `yay` unless skipped.
+- Applies repo config from `dotfiles/config/nvim` to `$HOME/.config/nvim`.
+- Syncs plugins (lazy.nvim) and installs Mason language tools.
 
-- Installs Neovim dependencies unless skipped
-- Applies repo config from `dotfiles/config/nvim` to `$HOME/.config/nvim`
-- Syncs plugins and Mason language tools
-
-Optional flags:
+**Optional flags:**
 
 ```bash
-./scripts/setup-neovim-vscode.sh --skip-packages
-./scripts/setup-neovim-vscode.sh --skip-sync
+./scripts/setup-neovim-vscode.sh --skip-packages   # Skip yay installs
+./scripts/setup-neovim-vscode.sh --skip-sync       # Skip plugin/LSP sync
 ```
+
+---
 
 ## Neovim Keybindings
 
-Leader key: Space
+Leader key: `Space`
 
-Explorer and navigation:
+### Explorer and Navigation
 
-- Space + e: Toggle right-side explorer
-- Space + f + f: Find files
-- Space + f + g: Search text in project
-- Space + f + b: List open buffers
+| Keys | Action |
+|------|--------|
+| `Space` + `e` | Toggle right-side file explorer |
+| `Space` + `f` + `f` | Find files |
+| `Space` + `f` + `g` | Search text in project |
+| `Space` + `f` + `b` | List open buffers |
 
-LSP actions:
+### LSP Actions
 
-- K: Hover documentation
-- g + d: Go to definition
-- g + r: Find references
-- Space + r + n: Rename symbol
-- Space + c + a: Code action
+| Keys | Action |
+|------|--------|
+| `K` | Hover documentation |
+| `g` + `d` | Go to definition |
+| `g` + `r` | Find references |
+| `Space` + `r` + `n` | Rename symbol |
+| `Space` + `c` + `a` | Code action |
 
-Completion in insert mode:
+### Completion (Insert Mode)
 
-- Ctrl + Space: Open completion menu
-- Enter: Confirm selected item
-- Tab: Next completion item or snippet jump
-- Shift + Tab: Previous completion item or snippet jump back
+| Keys | Action |
+|------|--------|
+| `Ctrl` + `Space` | Open completion menu |
+| `Enter` | Confirm selected item |
+| `Tab` | Next item or snippet jump forward |
+| `Shift` + `Tab` | Previous item or snippet jump back |
+
+---
+
+## Waybar
+
+Waybar is launched automatically by Hyprland on startup. To reload it after config changes:
+
+```bash
+killall waybar && waybar &
+```
+
+Or use the keybind (set in `hyprland.conf`):
+
+```
+Super + Shift + B
+```

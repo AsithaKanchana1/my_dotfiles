@@ -1,6 +1,8 @@
 * {
     /* Put your installed Nerd Font name first here! */
-    font-family: "JetBrainsMono Nerd Font", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-family:
+        "JetBrainsMono Nerd Font", FontAwesome, Roboto, Helvetica, Arial,
+        sans-serif;
     font-size: 14px;
     font-weight: 900;
 }
@@ -12,9 +14,10 @@ window#waybar {
 }
 
 /* 2. Apply the thick, rounded pill shape to ALL your active modules */
-#workspaces, /* <--- Added this back to unify the style! */
+#workspaces,
 #clock,
 #network,
+#bluetooth, /* <--- Added Bluetooth here */
 #battery,
 #custom-pacman,
 #custom-media,
@@ -30,13 +33,30 @@ window#waybar {
 }
 
 /* 3. Give specific text colors to modules */
-#network { color: #cba6f7; /* Purple */ }
-#custom-pacman { color: #fab387; /* Orange */ }
-#battery { color: #a6e3a1; /* Green */ }
-#clock { color: #89b4fa; /* Blue */ }
-#pulseaudio { color: #f9e2af; /* Yellow */ }
-#cpu { color: #94e2d5; /* Teal */ }
-#memory { color: #f5c2e7; /* Pink */ }
+#network {
+    color: #cba6f7; /* Purple */
+}
+#bluetooth {
+    color: #89dceb; /* Sky Blue */
+} /* <--- Added Bluetooth color */
+#custom-pacman {
+    color: #fab387; /* Orange */
+}
+#battery {
+    color: #a6e3a1; /* Green */
+}
+#clock {
+    color: #89b4fa; /* Blue */
+}
+#pulseaudio {
+    color: #f9e2af; /* Yellow */
+}
+#cpu {
+    color: #94e2d5; /* Teal */
+}
+#memory {
+    color: #f5c2e7; /* Pink */
+}
 
 /* 4. Style the Workspaces (Dots INSIDE the pill) */
 #workspaces {
@@ -45,37 +65,40 @@ window#waybar {
 
 #workspaces button {
     /* Fixed-size circular dots (prevents the laggy layout shift) */
-    min-width: 18px;  
-    min-height: 18px; 
+    min-width: 18px;
+    min-height: 18px;
     padding: 0;
     margin: 0 4px;
     border-radius: 50%;
-    
+
     /* Inactive dot appearance */
-    background-color: #313244; 
-    color: #a6adc8;            
-    font-size: 11px; 
+    background-color: #313244;
+    color: #a6adc8;
+    font-size: 11px;
     border: none;
     box-shadow: none;
-    
-    transition: background-color 0.1s ease, color 0.1s ease;
+
+    transition:
+        background-color 0.1s ease,
+        color 0.1s ease;
 }
 
 #workspaces button:hover {
-    background-color: #45475a; 
+    background-color: #45475a;
 }
 
-#workspaces button.active, 
+#workspaces button.active,
 #workspaces button.focused {
-    background-color: #89b4fa; 
-    color: #11111b;            
+    background-color: #89b4fa;
+    color: #11111b;
     font-weight: 900;
 }
 
 /* --- LAPTOP SCREEN SPECIFIC RULES --- */
-window#waybar.eDP-1 #workspaces, /* <--- Added this back! */
+window#waybar.eDP-1 #workspaces,
 window#waybar.eDP-1 #clock,
 window#waybar.eDP-1 #network,
+window#waybar.eDP-1 #bluetooth, /* <--- Added Bluetooth here */
 window#waybar.eDP-1 #battery,
 window#waybar.eDP-1 #custom-pacman,
 window#waybar.eDP-1 #custom-media,
@@ -84,15 +107,16 @@ window#waybar.eDP-1 #tray,
 window#waybar.eDP-1 #cpu,
 window#waybar.eDP-1 #memory,
 window#waybar.eDP-1 #custom-power {
-    margin: 2px 2px; 
-    padding: 0px 10px; 
-    font-size: 12px; 
+    margin: 2px 2px;
+    padding: 0px 10px;
+    font-size: 12px;
 }
 
 /* --- EXTERNAL MONITOR SPECIFIC RULES --- */
-window#waybar.HDMI-A-1 #workspaces, /* <--- Added this back! */
+window#waybar.HDMI-A-1 #workspaces,
 window#waybar.HDMI-A-1 #clock,
 window#waybar.HDMI-A-1 #network,
+window#waybar.HDMI-A-1 #bluetooth, /* <--- Added Bluetooth here */
 window#waybar.HDMI-A-1 #battery,
 window#waybar.HDMI-A-1 #custom-pacman,
 window#waybar.HDMI-A-1 #custom-media,
@@ -101,7 +125,7 @@ window#waybar.HDMI-A-1 #tray,
 window#waybar.HDMI-A-1 #cpu,
 window#waybar.HDMI-A-1 #memory,
 window#waybar.HDMI-A-1 #custom-power {
-    margin: 6px 4px; 
+    margin: 6px 4px;
     padding: 2px 16px;
     font-size: 14px;
 }

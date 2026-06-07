@@ -24,3 +24,4 @@ nwg-look
 dolphin
 kdeconnect
 starship
+blueman

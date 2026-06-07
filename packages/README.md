@@ -1,16 +1,44 @@
-# Package Lists
+# Package Catalog
 
-This directory contains package manifests consumed by the installation scripts.
+This directory contains the package manifests consumed by `scripts/install-software.sh`.
 
-- `base-packages.txt`: Core packages for development and daily usage.
-- `extended-packages.txt`: Optional packages for additional desktop and development tooling.
+## Structure
 
-Format:
+| File | Purpose |
+|------|---------|
+| `catalog/index.tsv` | Master index — lists every category with its key, label, description, and path to its package list. |
+| `catalog/<category>.txt` | One package name per line for that category. |
 
-- One package name per line
-- Empty lines are allowed
-- Lines starting with `#` are treated as comments
+## Categories
 
-Installation source:
+| Key | Label |
+|-----|-------|
+| `core` | Core workstation essentials |
+| `development` | Development toolchain |
+| `desktop` | Desktop and shell integration |
+| `media` | Media and creative apps |
+| `internet` | Internet and communication |
+| `system` | System maintenance |
+| `drivers-intel` | Intel drivers |
+| `drivers-amd` | AMD drivers |
+| `drivers-nvidia` | NVIDIA drivers |
+| `drivers-virtualization` | Virtualization and guest tools |
+| `drivers-printing` | Printing and scanning |
+| `gaming` | Gaming stack |
+| `productivity` | Productivity and office |
 
-- Packages are installed through `yay` by `scripts/install-packages.sh`
+## Package File Format
+
+- One package name per line.
+- Empty lines are ignored.
+- Lines starting with `#` are treated as comments.
+- Packages are installed via `yay` (AUR helper).
+
+## Adding a New Category
+
+1. Create `catalog/<key>.txt` with your package list.
+2. Add a row to `catalog/index.tsv`:
+   ```
+   <key>\t<label>\t<description>\tpackages/catalog/<key>.txt
+   ```
+3. The new category will appear automatically in the interactive installer.

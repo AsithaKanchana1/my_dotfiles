@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 CACHE="/tmp/waybar_pacman_updates"
 LOCK="/tmp/waybar_pacman.lock"
