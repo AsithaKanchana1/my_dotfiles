@@ -1,16 +1,17 @@
+@import "theme.css";
+
 * {
-    /* Put your installed Nerd Font name first here! */
-    font-family:
-        "JetBrainsMono Nerd Font", FontAwesome, Roboto, Helvetica, Arial,
-        sans-serif;
-    font-size: 14px;
-    font-weight: 900;
+  /* Put your installed Nerd Font name first here! */
+  font-family:
+    "JetBrainsMono Nerd Font", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 900;
 }
 
 /* 1. Make the main bar completely transparent */
 window#waybar {
-    background-color: transparent;
-    border: none;
+  background-color: transparent;
+  border: none;
 }
 
 /* 2. Apply the thick, rounded pill shape to ALL your active modules */
@@ -27,75 +28,75 @@ window#waybar {
 #memory,
 #temperature,
 #tray {
-    background-color: #1e1e2e; /* Dark background color of the pills */
-    color: #cdd6f4; /* Default text color */
-    border-radius: 20px; /* Makes the extreme rounded corners */
+  background-color: @module_background;
+  color: @foreground;
+  border-radius: 20px; /* Makes the extreme rounded corners */
 }
 
 /* 3. Give specific text colors to modules */
 #network {
-    color: #cba6f7; /* Purple */
+  color: @highlight;
 }
 #bluetooth {
-    color: #89dceb; /* Sky Blue */
+  color: @accent;
 } /* <--- Added Bluetooth color */
 #custom-pacman {
-    color: #fab387; /* Orange */
+  color: @highlight;
 }
 #battery {
-    color: #a6e3a1; /* Green */
+  color: @accent;
 }
 #clock {
-    color: #89b4fa; /* Blue */
+  color: @accent;
 }
 #pulseaudio {
-    color: #f9e2af; /* Yellow */
+  color: @highlight;
 }
 #cpu {
-    color: #94e2d5; /* Teal */
+  color: @accent;
 }
 #memory {
-    color: #f5c2e7; /* Pink */
+  color: @highlight;
 }
 
 /* 4. Style the Workspaces (Dots INSIDE the pill) */
 #workspaces {
-    padding: 2px 6px; /* Space between the dots and the pill edge */
+  padding: 2px 6px; /* Space between the dots and the pill edge */
 }
 
 #workspaces button {
-    /* Fixed-size circular dots (prevents the laggy layout shift) */
-    min-width: 18px;
-    min-height: 18px;
-    padding: 0;
-    margin: 0 4px;
-    border-radius: 50%;
+  /* Fixed-size circular dots (prevents the laggy layout shift) */
+  min-width: 18px;
+  min-height: 18px;
+  padding: 0;
+  margin: 0 4px;
+  border-radius: 50%;
 
-    /* Inactive dot appearance */
-    background-color: #313244;
-    color: #a6adc8;
-    font-size: 11px;
-    border: none;
-    box-shadow: none;
+  /* Inactive dot appearance */
+  background-color: #313244;
+  color: #a6adc8;
+  font-size: 11px;
+  border: none;
+  box-shadow: none;
 
-    transition:
-        background-color 0.1s ease,
-        color 0.1s ease;
+  transition:
+    background-color 0.1s ease,
+    color 0.1s ease;
 }
 
 #workspaces button:hover {
-    background-color: #45475a;
+  background-color: #45475a;
 }
 
 #workspaces button.active,
 #workspaces button.focused {
-    background-color: #89b4fa;
-    color: #11111b;
-    font-weight: 900;
+  background-color: #89b4fa;
+  color: #11111b;
+  font-weight: 900;
 }
 
 /* --- LAPTOP SCREEN SPECIFIC RULES --- */
-window#waybar.eDP-1 #workspaces,
+window#waybar.eDP-1 #workspaces, 
 window#waybar.eDP-1 #clock,
 window#waybar.eDP-1 #network,
 window#waybar.eDP-1 #bluetooth, /* <--- Added Bluetooth here */
@@ -107,13 +108,13 @@ window#waybar.eDP-1 #tray,
 window#waybar.eDP-1 #cpu,
 window#waybar.eDP-1 #memory,
 window#waybar.eDP-1 #custom-power {
-    margin: 2px 2px;
-    padding: 0px 10px;
-    font-size: 12px;
+  margin: 2px 2px;
+  padding: 0px 10px;
+  font-size: 12px;
 }
 
 /* --- EXTERNAL MONITOR SPECIFIC RULES --- */
-window#waybar.HDMI-A-1 #workspaces,
+window#waybar.HDMI-A-1 #workspaces, 
 window#waybar.HDMI-A-1 #clock,
 window#waybar.HDMI-A-1 #network,
 window#waybar.HDMI-A-1 #bluetooth, /* <--- Added Bluetooth here */
@@ -125,7 +126,23 @@ window#waybar.HDMI-A-1 #tray,
 window#waybar.HDMI-A-1 #cpu,
 window#waybar.HDMI-A-1 #memory,
 window#waybar.HDMI-A-1 #custom-power {
-    margin: 6px 4px;
-    padding: 2px 16px;
-    font-size: 14px;
+  margin: 6px 4px;
+  padding: 2px 16px;
+  font-size: 14px;
+}
+
+/*WASI Whatsapp Wrapper Waybar */
+#custom-wasi {
+  font-size: 18px;
+  padding: 0 10px;
+  color: #8a8a8a; /* Default dimmed color when stopped */
+}
+
+#custom-wasi.running {
+  color: #25d366; /* WhatsApp green when process is active */
+}
+
+#custom-wasi:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
 }

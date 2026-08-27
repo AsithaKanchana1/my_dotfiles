@@ -1,8 +1,0 @@
-cups
-system-config-printer
-hplip
-sane-airscan
-gutenprint
-ghostscript
-simple-scan
-xsane

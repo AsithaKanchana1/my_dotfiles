@@ -6,7 +6,12 @@
   "spacing": 4,
 
   // Module Order
-  "modules-left": ["hyprland/workspaces", "custom/pacman", "custom/media"],
+  "modules-left": [
+    "hyprland/workspaces",
+    "custom/pacman",
+    "custom/media",
+    "custom/wasi",
+  ],
   "modules-center": ["clock"],
   "modules-right": [
     "pulseaudio",
@@ -21,19 +26,18 @@
   // --- Modules Configuration ---
 
   "hyprland/workspaces": {
-    // Fixed name here to match Hyprland
     "disable-scroll": true,
     "all-outputs": true,
-    "tooltip": false,
-    "format": "{icon}",
-    "format-icons": {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "5": "5",
-      "default": "",
+    "sort-by-number": true,
+    "show-special": false,
+    "ignore-workspaces": [
+      "^(?![0-9]+$).+"
+    ],
+    "persistent-workspaces": {
+      "*": 4
     },
+    "tooltip": false,
+    "format": "{name}",
   },
 
   // media icon on way bar
@@ -49,15 +53,14 @@
     "on-scroll-down": "playerctl previous",
     "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null",
     "format-icons": {
-      // Fixed: Added icons back in
-      "spotify": "",
-      //"default": ""
+      "spotify": "",
+      "default": "♫"
     },
   },
 
   //update icon in way bar
   "custom/pacman": {
-    "format": "{text} 󰅢 ",
+    "format": "{text} ",
     "interval": 3600,
     "exec": "$HOME/.config/waybar/check_updates.sh",
     "exec-if": "exit 0",
@@ -66,7 +69,7 @@
   },
 
   "clock": {
-    "format": "  {:%I:%M %p}", // e.g., 08:38 PM
+    "format": "  {:%I:%M %p}", // e.g., 08:38 PM
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
   },
 
@@ -74,15 +77,15 @@
     "format": "{icon}  {volume}%",
     "format-muted": " 󰝟 Muted",
     "format-icons": {
-      "headphone": "",
-      "default": ["", "", ""],
+      "headphone": "",
+      "default": ["", "", ""],
     },
     "on-click": "pavucontrol",
   },
 
   "network": {
     "interval": 1,
-    "format-wifi": "  {essid:.5} |  󰁅 {bandwidthDownBytes}  󰁝 {bandwidthUpBytes}",
+    "format-wifi": "  {essid:.5} |  󰁅 {bandwidthDownBytes}  󰁝 {bandwidthUpBytes}",
     "format-ethernet": "󰈀   Wired  |  󰁅 {bandwidthDownBytes}  󰁝 {bandwidthUpBytes}",
     "format-disconnected": "⚠  Disconnected",
     "tooltip-format": "{ifname} via {gwaddr}",
@@ -93,14 +96,14 @@
 
   "cpu": {
     "interval": 2,
-    "format": "󰍛 {usage}%",
+    "format": "CPU {usage}%",
     "tooltip": true,
     "tooltip-format": "CPU Usage: {usage}%",
   },
 
   "memory": {
     "interval": 2,
-    "format": "   {}% | {used:0.1f}GB / {total:0.1f}GB",
+    "format": "RAM {}% | {used:0.1f}GB/{total:0.1f}GB",
     "tooltip": true,
     "tooltip-format": "RAM: {used:0.1f}GB / {total:0.1f}GB",
   },
@@ -111,20 +114,20 @@
       "critical": 15,
     },
     "format": "{icon}  {capacity}%",
-    "format-charging": "  {capacity}%",
-    "format-plugged": "  {capacity}%",
-    "format-icons": ["", "", "", "", ""],
+    "format-charging": "  {capacity}%",
+    "format-plugged": "  {capacity}%",
+    "format-icons": ["", "", "", "", ""],
   },
 
   "custom/power": {
-    "format": "⏻ ",
+    "format": "Power",
     "tooltip": false,
     "on-click": "wlogout",
   },
 
   "bluetooth": {
-    "format": " {status}",
-    "format-connected": " {num_connections} connected",
+    "format": " {status}",
+    "format-connected": " {num_connections} connected",
     "tooltip-format": "{controller_alias}\t{controller_address}",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
@@ -132,5 +135,16 @@
     // The updated click commands:
     "on-click": "bluetoothctl power on && bluetoothctl --timeout 15 scan on & blueman-manager",
     "on-click-right": "rfkill toggle bluetooth",
+  },
+
+  "custom/wasi": {
+    "format": "",
+    "tooltip": true,
+    "tooltip-format": "WhatsApp (WASI)",
+    "on-click": "wasi",
+    "on-click-right": "pkill wasi",
+    "exec": "pgrep -x wasi > /dev/null && echo '{\"class\": \"running\"}' || echo '{\"class\": \"stopped\"}'",
+    "return-type": "json",
+    "interval": 2,
   },
 }

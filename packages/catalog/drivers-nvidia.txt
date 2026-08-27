@@ -1,9 +1,0 @@
-nvidia
-nvidia-utils
-nvidia-settings
-opencl-nvidia
-nvidia-prime
-nvidia-dkms
-linux-headers
-dkms
-vulkan-tools

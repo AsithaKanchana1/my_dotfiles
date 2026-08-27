@@ -1,6 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -euo pipefail
 
 DIR="$HOME/Pictures/Wallpapers"
+
+if [ ! -d "$DIR" ]; then
+    notify-send "Wallpaper Error" "Directory not found: $DIR"
+    exit 0
+fi
 
 # 0. Fix spaces in filenames (hyprctl breaks if images have spaces in their names)
 for f in "$DIR"/*\ *; do
@@ -10,7 +17,7 @@ for f in "$DIR"/*\ *; do
 done
 
 # 1. Safely find a random image
-RANDOM_PIC=$(find "$DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" \) | shuf -n 1)
+RANDOM_PIC=$(find "$DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.webp" \) | shuf -n 1)
 
 # Check if we actually found a picture
 if [ -z "$RANDOM_PIC" ]; then
@@ -29,3 +36,6 @@ echo "splash = false" >> ~/.config/hypr/hyprpaper.conf
 
 # 4. Unload old images to free up RAM safely
 hyprctl hyprpaper unload unused
+
+# Generate the shared theme and refresh Hyprland and Waybar.
+"$HOME/.config/hypr/scripts/update-theme.sh" "$RANDOM_PIC" --reload

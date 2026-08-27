@@ -1,7 +1,0 @@
-mesa
-vulkan-radeon
-libva-mesa-driver
-opencl-mesa
-amd-ucode
-vulkan-tools
-mesa-utils

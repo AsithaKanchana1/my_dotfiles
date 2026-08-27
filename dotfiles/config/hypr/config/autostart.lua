@@ -1,0 +1,15 @@
+-- Startup services converted from legacy hyprland.conf
+
+hl.on("hyprland.start", function()
+    hl.dsp.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+    hl.dsp.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+    hl.dsp.exec_cmd("waybar")
+    hl.dsp.exec_cmd("hyprpaper")
+    hl.dsp.exec_cmd("nm-applet --indicator")
+    hl.dsp.exec_cmd(TERMINAL)
+    hl.dsp.exec_cmd("swaync")
+    hl.dsp.exec_cmd("wl-paste --type text --watch cliphist store")
+    hl.dsp.exec_cmd("wl-paste --type image --watch cliphist store")
+    hl.dsp.exec_cmd("swww-daemon")
+    hl.dsp.exec_cmd("swww img $HOME/Pictures/Wallpapers/6836757.jpg --transition-type wipe")
+end)
