@@ -44,8 +44,8 @@ printf '$color2 = rgb(%s)\n$color4 = rgb(%s)\n$background = rgb(%s)\n' \
     "$ACCENT" "$HIGHLIGHT" "$BACKGROUND" > "$HYPR_THEME"
 
 cat > "$WAYBAR_THEME" <<EOF
-@define-color bar_background #${BACKGROUND}e6;
-@define-color module_background #${BACKGROUND}e6;
+@define-color bar_background #${BACKGROUND};
+@define-color module_background #${BACKGROUND};
 @define-color foreground $FOREGROUND;
 @define-color accent #$ACCENT;
 @define-color highlight #$HIGHLIGHT;

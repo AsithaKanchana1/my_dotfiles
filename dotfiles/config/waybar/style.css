@@ -6,11 +6,12 @@
     "JetBrainsMono Nerd Font", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
   font-size: 14px;
   font-weight: 900;
+  color: @foreground;
 }
 
 /* 1. Make the main bar completely transparent */
 window#waybar {
-  background-color: transparent;
+  background-color: @bar_background;
   border: none;
 }
 
@@ -34,31 +35,6 @@ window#waybar {
 }
 
 /* 3. Give specific text colors to modules */
-#network {
-  color: @highlight;
-}
-#bluetooth {
-  color: @accent;
-} /* <--- Added Bluetooth color */
-#custom-pacman {
-  color: @highlight;
-}
-#battery {
-  color: @accent;
-}
-#clock {
-  color: @accent;
-}
-#pulseaudio {
-  color: @highlight;
-}
-#cpu {
-  color: @accent;
-}
-#memory {
-  color: @highlight;
-}
-
 /* 4. Style the Workspaces (Dots INSIDE the pill) */
 #workspaces {
   padding: 2px 6px; /* Space between the dots and the pill edge */
@@ -74,7 +50,7 @@ window#waybar {
 
   /* Inactive dot appearance */
   background-color: #313244;
-  color: #a6adc8;
+  color: @foreground;
   font-size: 11px;
   border: none;
   box-shadow: none;
@@ -91,7 +67,7 @@ window#waybar {
 #workspaces button.active,
 #workspaces button.focused {
   background-color: #89b4fa;
-  color: #11111b;
+  color: @foreground;
   font-weight: 900;
 }
 
@@ -135,11 +111,7 @@ window#waybar.HDMI-A-1 #custom-power {
 #custom-wasi {
   font-size: 18px;
   padding: 0 10px;
-  color: #8a8a8a; /* Default dimmed color when stopped */
-}
-
-#custom-wasi.running {
-  color: #25d366; /* WhatsApp green when process is active */
+  color: @foreground;
 }
 
 #custom-wasi:hover {
