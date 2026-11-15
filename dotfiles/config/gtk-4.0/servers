@@ -3,12 +3,72 @@
       xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks"
       xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info"
 >
-  <bookmark href="ftp://192.168.1.103:7550/" added="2026-07-29T01:42:08.431208Z" modified="2026-07-29T01:42:08.431213Z" visited="2026-07-29T01:42:08.431209Z">
-    <title>/ on 192.168.1.103:7550</title>
+  <bookmark href="ftp://192.168.1.100:7550/" added="2026-09-14T05:53:19.307854Z" modified="2026-09-14T05:53:19.307858Z" visited="2026-09-14T05:53:19.307855Z">
+    <title>/ on 192.168.1.100:7550</title>
     <info>
       <metadata owner="http://freedesktop.org">
         <bookmark:applications>
-          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2026-07-29T01:42:08.431211Z" count="1"/>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2026-09-14T05:53:19.307856Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="ftp://192.168.1.101:7550/" added="2026-09-19T06:20:41.689558Z" modified="2026-09-19T06:20:41.689562Z" visited="2026-09-19T06:20:41.689559Z">
+    <title>/ on 192.168.1.101:7550</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2026-09-19T06:20:41.689561Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="ftp://192.168.1.100:4503/" added="2026-09-20T16:25:37.061842Z" modified="2026-09-20T16:25:37.061847Z" visited="2026-09-20T16:25:37.061843Z">
+    <title>/ on 192.168.1.100:4503</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2026-09-20T16:25:37.061845Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="ftp://192.168.1.102:7550/" added="2026-09-27T15:33:30.916935Z" modified="2026-09-27T15:33:30.916940Z" visited="2026-09-27T15:33:30.916936Z">
+    <title>/ on 192.168.1.102:7550</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2026-09-27T15:33:30.916938Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="ftp://192.168.1.147:7550/" added="2026-10-28T07:02:10.255724Z" modified="2026-10-28T07:02:10.255730Z" visited="2026-10-28T07:02:10.255726Z">
+    <title>/ on 192.168.1.147:7550</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2026-10-28T07:02:10.255728Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="ftp://10.244.137.224:7550/" added="2026-10-30T14:31:06.956778Z" modified="2026-10-30T14:31:06.956781Z" visited="2026-10-30T14:31:06.956779Z">
+    <title>/ on 10.244.137.224:7550</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2026-10-30T14:31:06.956780Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="ftp://192.168.1.101:4503/" added="2026-11-11T16:15:22.815959Z" modified="2026-11-11T16:15:22.815964Z" visited="2026-11-11T16:15:22.815960Z">
+    <title>/ on 192.168.1.101:4503</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2026-11-11T16:15:22.815962Z" count="1"/>
         </bookmark:applications>
       </metadata>
     </info>

@@ -1,0 +1,59 @@
+{
+    "git.enableSmartCommit": true,
+    "git.autofetch": true,
+    "editor.fontSize": 18,
+    "files.autoSave": "afterDelay",
+    "redhat.telemetry.enabled": true,
+    "liveServer.settings.donotVerifyTags": true,
+    "liveServer.settings.donotShowInfoMsg": true,
+    "git.openRepositoryInParentFolders": "never",
+    "workbench.iconTheme": "material-icon-theme",
+    "git.confirmSync": false,
+    "explorer.confirmDragAndDrop": false,
+    "workbench.startupEditor": "none",
+    "vue.server.hybridMode": "typeScriptPluginOnly",
+    "explorer.confirmDelete": false,
+    "workbench.colorTheme": "Nord",
+    "workbench.productIconTheme": "feather-vscode",
+    "files.autoSaveDelay": 100,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "explorer.confirmPasteNative": false,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "docker.extension.enableComposeLanguageServer": false,
+    "workbench.editorAssociations": {
+        "*.copilotmd": "vscode.markdown.preview.editor",
+        "*.json": "default",
+        "*.db": "default"
+    },
+    "workbench.sideBar.location": "right",
+    "editor.linkedEditing": true,
+    "markdown-preview-enhanced.previewTheme": "atom-dark.css",
+    "chat.mcp.gallery.enabled": true,
+    "notebook.lineNumbers": "on",
+    "vs-kubernetes": {
+        "vscode-kubernetes.helm-path-linux": "/home/asitha/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
+        "vscode-kubernetes.kubectl-path-linux": "/home/asitha/.local/state/vs-kubernetes/tools/kubectl/kubectl",
+        "vscode-kubernetes.minikube-path-linux": "/home/asitha/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube"
+    },
+    "chat.tools.urls.autoApprove": {
+        "https://code.visualstudio.com": true,
+        "https://github.com/microsoft/vscode/wiki/*": true,
+        "https://github.com/r0x0r/pywebview": {
+            "approveRequest": false,
+            "approveResponse": true
+        },
+        "https://wiki.hypr.land": true
+    },
+    "chat.viewSessions.orientation": "stacked",
+    "chat.sessionSync.enabled": true,
+    "yaml.disableSchemaDetection": [
+        "**/.github/workflows/*.yml",
+        "**/.github/workflows/*.yaml",
+        "**/.gitea/workflows/*.yml",
+        "**/.gitea/workflows/*.yaml",
+        "**/.forgejo/workflows/*.yml",
+        "**/.forgejo/workflows/*.yaml"
+    ]
+}

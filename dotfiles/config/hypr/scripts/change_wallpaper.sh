@@ -36,10 +36,16 @@ for monitor in $(hyprctl monitors | awk '/^Monitor/ {print $2}'); do
   hyprctl hyprpaper wallpaper "$monitor,$RANDOM_PIC"
 done
 
-# 4. Save it to hyprpaper.conf so it persists when you reboot
-# (We removed the old preload requirement here too)
-echo "wallpaper = ,$RANDOM_PIC" >~/.config/hypr/hyprpaper.conf
-echo "splash = false" >>~/.config/hypr/hyprpaper.conf
+# 4. Save explicit monitor assignments so Hyprpaper restores the image on boot.
+{
+  for monitor in $(hyprctl monitors | awk '/^Monitor/ {print $2}'); do
+    echo "wallpaper {"
+    echo "  monitor = $monitor"
+    echo "  path = $RANDOM_PIC"
+    echo "}"
+  done
+  echo "splash = false"
+} > "$HOME/.config/hypr/hyprpaper.conf"
 
 # 5. Generate the shared theme and refresh Hyprland and Waybar
 "$HOME/.config/hypr/scripts/update-theme.sh" "$RANDOM_PIC" --reload

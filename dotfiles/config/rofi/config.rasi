@@ -1,0 +1,119 @@
+configuration {
+    /* --- General Settings --- */
+    modi: "combi,drun,calc,filebrowser,emoji";
+    font: "JetBrainsMono Nerd Font 11";
+    show-icons: true;
+    icon-theme: "WhiteSur";
+    terminal: "kitty";
+
+    /* --- Custom Icons (Nerd Fonts v3) --- */
+    display-drun: "   ";
+    display-window: "   ";
+    display-combi: "   ";
+    display-calc: " 󰪚  ";
+    display-filebrowser: "   ";
+    display-emoji: "   ";
+
+    /* --- Priority & Spotlight Logic --- */
+    combi-modes: "calc,drun,filebrowser";
+    combi-display-format: "{mode} {text}";
+
+    /* --- Mouse Selection --- */
+    hover-select: true;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+}
+
+@theme "/dev/null"
+
+window {
+    transparency: "real";
+    location: center;
+    anchor: center;
+    fullscreen: false;
+    width: 640px;
+    x-offset: 0px;
+    y-offset: -120px;
+    enabled: true;
+    margin: 0px;
+    padding: 0px;
+    border: 2px solid;
+    border-radius: 15px;
+    border-color: #33ccff;
+    background-color: rgba(15, 15, 20, 0.85);
+}
+
+mainbox {
+    enabled: true;
+    spacing: 10px;
+    padding: 25px;
+    background-color: transparent;
+    children: [ "inputbar", "listview" ];
+}
+
+inputbar {
+    enabled: true;
+    spacing: 10px;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.07);
+    text-color: white;
+    border-radius: 10px;
+    children: [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled: true;
+    background-color: transparent;
+    text-color: #00ff99;
+}
+
+entry {
+    enabled: true;
+    background-color: transparent;
+    text-color: white;
+    placeholder: "Calculate, Search Apps or Files...";
+    placeholder-color: #888888;
+}
+
+listview {
+    enabled: true;
+    columns: 1;
+    lines: 8;
+    cycle: true;
+    dynamic: true;
+    scrollbar: false;
+    layout: vertical;
+    reverse: false;
+    fixed-height: true;
+    spacing: 6px;
+    background-color: transparent;
+}
+
+element {
+    enabled: true;
+    spacing: 12px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: transparent;
+    text-color: white;
+    cursor: pointer;
+}
+
+element selected.normal {
+    background-color: rgba(51, 204, 255, 0.2);
+    text-color: #00ff99;
+}
+
+element-icon {
+    size: 36px;
+    border-radius: 10px;
+    background-color: transparent;
+    cursor: inherit;
+}
+
+element-text {
+    vertical-align: 0.5;
+    horizontal-align: 0.0;
+    text-color: inherit;
+    background-color: transparent;
+}

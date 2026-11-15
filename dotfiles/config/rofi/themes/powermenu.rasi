@@ -1,0 +1,34 @@
+@import "~/.config/rofi/config.rasi"
+
+window {
+    location: center;
+    anchor: center;
+    width: 240px;
+    y-offset: 0px;
+    border: 2px solid;
+    border-radius: 15px;
+    border-color: #33ccff;
+    background-color: rgba(15, 15, 20, 0.9);
+}
+
+mainbox {
+    padding: 14px;
+    spacing: 8px;
+    children: [ "listview" ];
+}
+
+inputbar {
+    enabled: false;
+}
+
+listview {
+    columns: 1;
+    lines: 6;
+    spacing: 6px;
+    fixed-height: true;
+}
+
+element {
+    padding: 10px 14px;
+    border-radius: 10px;
+}

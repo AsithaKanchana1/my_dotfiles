@@ -1,0 +1,3 @@
+[manager]
+confirm_delete = true
+open_multi = true

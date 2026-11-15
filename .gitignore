@@ -1,0 +1,11 @@
+# Caches and generated files
+__pycache__/
+*.pyc
+*.log
+*.tmp
+.DS_Store
+
+# Never commit live credentials
+dotfiles/config/gh/hosts.yml
+dotfiles/config/opencode/auth.json
+dotfiles/config/fish/fish_variables

@@ -1,0 +1,25 @@
+[Added Associations]
+video/mp4=vlc.desktop;
+x-scheme-handler/mailto=userapp-Thunderbird-ZTH7W3.desktop;
+x-scheme-handler/mid=userapp-Thunderbird-ZTH7W3.desktop;
+message/rfc822=userapp-Thunderbird-ZTH7W3.desktop;
+x-scheme-handler/net.thunderbird=userapp-Thunderbird-61M9W3.desktop;
+image/jpeg=ai.storyteller.pdfcraft.desktop;
+application/pdf=brave-browser.desktop;
+video/matroska=vlc.desktop;
+
+[Default Applications]
+inode/directory=org.kde.dolphin.desktop;
+text/plain=org.gnome.TextEditor.desktop;
+x-scheme-handler/http=firefox.desktop;
+x-scheme-handler/https=firefox.desktop;
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+x-scheme-handler/opencode=ai.opencode.desktop.desktop
+video/mp4=vlc.desktop
+x-scheme-handler/mailto=userapp-Thunderbird-ZTH7W3.desktop
+x-scheme-handler/mid=userapp-Thunderbird-ZTH7W3.desktop
+message/rfc822=userapp-Thunderbird-ZTH7W3.desktop
+x-scheme-handler/net.thunderbird=userapp-Thunderbird-61M9W3.desktop
+image/jpeg=ai.storyteller.pdfcraft.desktop
+application/pdf=brave-browser.desktop
+video/matroska=vlc.desktop

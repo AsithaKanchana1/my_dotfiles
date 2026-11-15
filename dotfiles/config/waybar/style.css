@@ -11,7 +11,7 @@
 
 /* 1. Make the main bar completely transparent */
 window#waybar {
-  background-color: @bar_background;
+  background-color: transparent;
   border: none;
 }
 
@@ -19,7 +19,7 @@ window#waybar {
 #workspaces,
 #clock,
 #network,
-#bluetooth, /* <--- Added Bluetooth here */
+#bluetooth,
 #battery,
 #custom-pacman,
 #custom-media,
@@ -28,13 +28,35 @@ window#waybar {
 #cpu,
 #memory,
 #temperature,
-#tray {
-  background-color: @module_background;
-  color: @foreground;
-  border-radius: 20px; /* Makes the extreme rounded corners */
+#tray,
+#custom-zapfast {
+  padding: 0 10px;
+  margin: 0 4px;
+  /* Assuming a dark pill background based on your workspaces. Adjust if needed. */
+  background-color: #1e1e2e;
+  border-radius: 8px;
 }
 
-/* 3. Give specific text colors to modules */
+/* 3. Specific Zapfast Styling (Replaces old WASI) */
+#custom-zapfast {
+  font-size: 18px; /* Matches your old WASI size */
+  color: #50fa7b; /* Default WhatsApp green */
+}
+
+#custom-zapfast:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+/* Active process indicators for Zapfast */
+#custom-zapfast.running {
+  color: #25d366; /* Bright WhatsApp green when open */
+}
+
+#custom-zapfast.stopped {
+  color: #6272a4; /* Dimmed color when process is closed */
+}
+
 /* 4. Style the Workspaces (Dots INSIDE the pill) */
 #workspaces {
   padding: 2px 6px; /* Space between the dots and the pill edge */
@@ -72,10 +94,10 @@ window#waybar {
 }
 
 /* --- LAPTOP SCREEN SPECIFIC RULES --- */
-window#waybar.eDP-1 #workspaces, 
+window#waybar.eDP-1 #workspaces,
 window#waybar.eDP-1 #clock,
 window#waybar.eDP-1 #network,
-window#waybar.eDP-1 #bluetooth, /* <--- Added Bluetooth here */
+window#waybar.eDP-1 #bluetooth,
 window#waybar.eDP-1 #battery,
 window#waybar.eDP-1 #custom-pacman,
 window#waybar.eDP-1 #custom-media,
@@ -83,17 +105,19 @@ window#waybar.eDP-1 #pulseaudio,
 window#waybar.eDP-1 #tray,
 window#waybar.eDP-1 #cpu,
 window#waybar.eDP-1 #memory,
-window#waybar.eDP-1 #custom-power {
+window#waybar.eDP-1 #custom-power,
+window#waybar.eDP-1 #custom-zapfast {
+  /* <--- Added Zapfast here */
   margin: 2px 2px;
   padding: 0px 10px;
   font-size: 12px;
 }
 
 /* --- EXTERNAL MONITOR SPECIFIC RULES --- */
-window#waybar.HDMI-A-1 #workspaces, 
+window#waybar.HDMI-A-1 #workspaces,
 window#waybar.HDMI-A-1 #clock,
 window#waybar.HDMI-A-1 #network,
-window#waybar.HDMI-A-1 #bluetooth, /* <--- Added Bluetooth here */
+window#waybar.HDMI-A-1 #bluetooth,
 window#waybar.HDMI-A-1 #battery,
 window#waybar.HDMI-A-1 #custom-pacman,
 window#waybar.HDMI-A-1 #custom-media,
@@ -101,20 +125,10 @@ window#waybar.HDMI-A-1 #pulseaudio,
 window#waybar.HDMI-A-1 #tray,
 window#waybar.HDMI-A-1 #cpu,
 window#waybar.HDMI-A-1 #memory,
-window#waybar.HDMI-A-1 #custom-power {
+window#waybar.HDMI-A-1 #custom-power,
+window#waybar.HDMI-A-1 #custom-zapfast {
+  /* <--- Added Zapfast here */
   margin: 6px 4px;
   padding: 2px 16px;
   font-size: 14px;
-}
-
-/*WASI Whatsapp Wrapper Waybar */
-#custom-wasi {
-  font-size: 18px;
-  padding: 0 10px;
-  color: @foreground;
-}
-
-#custom-wasi:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
 }

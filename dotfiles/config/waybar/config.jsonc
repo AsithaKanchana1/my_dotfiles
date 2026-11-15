@@ -2,7 +2,7 @@
 {
   "layer": "top",
   "position": "top",
-  // "margin-bottom": 1, // way bar marging to desktop
+  // "margin-bottom": 1, // way bar margin to desktop
   "spacing": 4,
 
   // Module Order
@@ -10,7 +10,7 @@
     "hyprland/workspaces",
     "custom/pacman",
     "custom/media",
-    "custom/wasi",
+    "custom/zapfast",
   ],
   "modules-center": ["clock"],
   "modules-right": [
@@ -30,11 +30,9 @@
     "all-outputs": true,
     "sort-by-number": true,
     "show-special": false,
-    "ignore-workspaces": [
-      "^(?![0-9]+$).+"
-    ],
+    "ignore-workspaces": ["^(?![0-9]+$).+"],
     "persistent-workspaces": {
-      "*": 4
+      "*": 4,
     },
     "tooltip": false,
     "format": "{name}",
@@ -45,7 +43,7 @@
     "format": "{icon} {text}",
     "escape": true,
     "return-type": "json",
-    "max-length": 30, // Fixed: Added a number here
+    "max-length": 30,
     "on-click": "playerctl play-pause",
     "on-click-right": "playerctl stop",
     "smooth-scrolling-threshold": 10,
@@ -54,17 +52,17 @@
     "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null",
     "format-icons": {
       "spotify": "",
-      "default": "♫"
+      "default": "♫",
     },
   },
 
-  //update icon in way bar
+  // update icon in way bar
   "custom/pacman": {
     "format": "{text} ",
     "interval": 3600,
     "exec": "$HOME/.config/waybar/check_updates.sh",
     "exec-if": "exit 0",
-    "on-click": "kitty --hold bash -c 'yay -Syu && rm /tmp/waybar_pacman_updates && pkill -RTMIN+8 waybar'",
+    "on-click": "kitty --hold bash -c 'yay -Syu && rm -f /tmp/waybar_pacman_updates && pkill -RTMIN+8 waybar'",
     "signal": 8,
   },
 
@@ -86,7 +84,7 @@
   "network": {
     "interval": 1,
     "format-wifi": "  {essid:.5} |  󰁅 {bandwidthDownBytes}  󰁝 {bandwidthUpBytes}",
-    "format-ethernet": "󰈀   Wired  |  󰁅 {bandwidthDownBytes}  󰁝 {bandwidthUpBytes}",
+    "format-ethernet": "󰈀    Wired  |  󰁅 {bandwidthDownBytes}  󰁝 {bandwidthUpBytes}",
     "format-disconnected": "⚠  Disconnected",
     "tooltip-format": "{ifname} via {gwaddr}",
     // This launches nmtui in a floating kitty window
@@ -122,9 +120,10 @@
   "custom/power": {
     "format": "Power",
     "tooltip": false,
-    "on-click": "wlogout",
+    "on-click": "$HOME/.config/rofi/powermenu.sh",
   },
 
+  // Bluetooth Icon
   "bluetooth": {
     "format": " {status}",
     "format-connected": " {num_connections} connected",
@@ -133,17 +132,18 @@
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
 
     // The updated click commands:
-    "on-click": "bluetoothctl power on && bluetoothctl --timeout 15 scan on & blueman-manager",
+    "on-click": "bluetoothctl power on && (bluetoothctl --timeout 15 scan on &) && blueman-manager",
     "on-click-right": "rfkill toggle bluetooth",
   },
 
-  "custom/wasi": {
+  // WhatsApp (Zapfast) icon
+  "custom/zapfast": {
     "format": "",
     "tooltip": true,
-    "tooltip-format": "WhatsApp (WASI)",
-    "on-click": "wasi",
-    "on-click-right": "pkill wasi",
-    "exec": "pgrep -x wasi > /dev/null && echo '{\"class\": \"running\"}' || echo '{\"class\": \"stopped\"}'",
+    "tooltip-format": "WhatsApp (Zapfast)",
+    "on-click": "zapfast",
+    "on-click-right": "pkill zapfast",
+    "exec": "pgrep -x zapfast > /dev/null && echo '{\"class\": \"running\"}' || echo '{\"class\": \"stopped\"}'",
     "return-type": "json",
     "interval": 2,
   },

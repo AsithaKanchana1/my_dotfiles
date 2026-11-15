@@ -1,0 +1,9 @@
+cpak-bin
+google-chrome
+localsend-bin
+opencode-desktop-bin
+topgrade-bin
+visual-studio-code-bin
+woeusb-ng
+yay-bin
+zapfast-bin
