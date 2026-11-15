@@ -1,0 +1,17 @@
+show=drun
+allow_images=true
+prompt=Apps
+term=kitty
+width=720
+height=520
+location=center
+xoffset=0
+yoffset=-100
+hide_scroll=true
+no_actions=true
+normal_window=true
+image_size=28
+columns=1
+lines=9
+sort_order=alphabetical
+insensitive=true
